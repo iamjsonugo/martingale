@@ -62,7 +62,6 @@ function calculateStake(outcome = false) {
   }
 }
 calculateStake(false);
-calculateStake(false);
 
 document.querySelector(".win-btn").addEventListener("click", (event) => {
   calculateStake(true);
@@ -79,7 +78,6 @@ document.querySelector(".refresh-btn").addEventListener("click", (event) => {
     odd = parseFloat(document.querySelector(".odd").value);
     document.querySelector("tbody").innerHTML = ``;
     calculateStake(false);
-    calculateStake(false);
 });
 
 const onChangeInputs = document.querySelectorAll(".form-control");
@@ -92,7 +90,6 @@ for (const input of onChangeInputs) {
     lossCounter = 1; //
     odd = parseFloat(document.querySelector(".odd").value);
     document.querySelector("tbody").innerHTML = ``;
-    calculateStake(false);
     calculateStake(false);
   });
 }
