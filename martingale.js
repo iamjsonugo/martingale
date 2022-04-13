@@ -78,34 +78,35 @@ function calculateStake(outcome = false) {
     accumulatedLosses = results.accumulatedLosses;
     lossCounter = results.lossCounter;
     odd = results.odd;
-
+    
+    let timestamp = new Date();
+    const  insertCycleData = {
+      step: results.step,
+      date:  timestamp.toLocaleString(undefined, {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"}),
+      time: timestamp.toLocaleString(undefined, {
+                  hour: "2-digit",
+                  minute: "2-digit",}),
+       openingBal: results.openingBalance,
+       stake: results.stake,
+       outcome: results.outcome ? "Win" : "Lose",
+       pnl: results.pnl,
+       closingBal: results.currentBalance,
+       profit: results.finalProfit,
+       lossCounter: results.lossCounter,
+       accumulatedLosses: results.accumulatedLosses < 0 ? 0 : results.accumulatedLosses,
+       odd: results.odd,
+      // strategy: document.querySelector(".strategy").value,
+       //currencyPair: document.querySelector(".trade-pair").value
+      };
+      
+      console.log(JSON.stringify(insertCycleData));
+      
     //add to daily reports
     if (results.lossCounter < 1) {
-      let cycle = [];
       let timestamp = new Date();
-
-      cycle.push(
-        timestamp.toLocaleString(undefined, {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        })
-      );
-      cycle.push(
-        timestamp.toLocaleString(undefined, {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      );
-      cycle.push("A/B");
-      cycle.push("CUR/COM");
-      cycle.push(Math.max(...maxStake.split(",")));
-      cycle.push(Math.max(...maxLossStreak.split(",")));
-      cycle.push(Math.max(...maxStep.split(",")));
-      cycle.push(Math.max(...maxAccountLoss.split(",")));
-      cycle.push(parseFloat(document.querySelector(".balance").value))
-      localStorage.setItem(timestamp.getTime(), JSON.stringify(cycle));
-
       function filterDaily(
         param = timestamp.toLocaleString(undefined, {
           day: "2-digit",
@@ -146,8 +147,8 @@ function calculateStake(outcome = false) {
       }
       filterDaily();
 
-      return;
     }
+    return insertCycleData;
   }
 }
 
@@ -196,7 +197,7 @@ let trackHighestStoredValue = "";
   }
 }
 filterMonthly();
-calculateStake(false);
+console.log(calculateStake(false));
 for (let i = 0; i < localStorage.length; i++) {
   
     let storedValue = localStorage.key(i);

@@ -1,4 +1,5 @@
-// check for IndexedDB support
+(function () {
+  // check for IndexedDB support
 if (!window.indexedDB) {
   console.log(`Your browser doesn't support IndexedDB`);
   return;
@@ -10,7 +11,7 @@ const request = indexedDB.open("UGO", 1);
 // create the object store and indexes
 request.onupgradeneeded = (event) => {
     let db = event.target.result;
-    let store = db.createObjectStore("Cycle", {
+    let store = db.createObjectStore("Cycles", {
       autoIncrement: true,
     });
     let index = store.createIndex("date", "date", {
@@ -27,48 +28,43 @@ request.onerror = (event) => {
 request.onsuccess = (event) => {
   const db = event.target.result;
 
-  // insert contacts
-  // insertContact(db, {
-  //     date: (new Date()).now,
-  //     time: 'John',
-  //     openingBal: 'John',
-  //     stake: 'John',
-  //     outcome: 'John',
-  //     pnl: 'John',
-  //     closingBal: 'John',
-  //     profit: 'John',
-  //     balance: 'John',
-  //     odd: 'John',
-  //     strategy: 'John',
-  //     currencyPair: 'John',
-  // });
+  // insert cycle
+  insertCycle(db, {
+    date: (new Date()).now,
+   time: 'John',
+     openingBal: 'John',
+    stake: 'John',
+      outcome: 'John',
+    pnl: 'John',
+    closingBal: 'John',
+    profit: 'John',
+     balance: 'John',
+      odd: 'John',
+   strategy: 'John',
+      currencyPair: 'John',
+  });
 
-  // insertContact(db, {
-  //     email: 'jane.doe@gmail.com',
-  //     firstName: 'Jane',
-  //     lastName: 'Doe'
-  // });
 
-  // get contact by id 1
-  // getContactById(db, 1);
+  // get cycle by id 1
+  // getCycleById(db, 1);
 
-  // get contact by email
-  // getContactByEmail(db, 'jane.doe@gmail.com');
+  // get cycle by email
+  // getCycleByDate(db, 'jane.doe@gmail.com');
 
-  // get all contacts
-  // getAllContacts(db);
+  // get all cycles
+  getAllCycles(db);
 
-  //deleteContact(db, 1);
+  //deleteCycle(db, 1);
 };
 
-function insertContact(db, contact) {
+function insertCycle(db, cycle) {
   // create a new transaction
-  const txn = db.transaction("Contacts", "readwrite");
+  const txn = db.transaction("Cycles", "readwrite");
 
-  // get the Contacts object store
-  const store = txn.objectStore("Contacts");
+  // get the Cycles object store
+  const store = txn.objectStore("Cycles");
   //
-  let query = store.put(contact);
+  let query = store.put(cycle);
 
   // handle success case
   query.onsuccess = function (event) {
@@ -87,15 +83,15 @@ function insertContact(db, contact) {
   };
 }
 
-function getContactById(db, id) {
-  const txn = db.transaction("Contacts", "readonly");
-  const store = txn.objectStore("Contacts");
+function getCycleById(db, id) {
+  const txn = db.transaction("Cycles", "readonly");
+  const store = txn.objectStore("Cycles");
 
   let query = store.get(id);
 
   query.onsuccess = (event) => {
     if (!event.target.result) {
-      console.log(`The contact with ${id} not found`);
+      console.log(`The cycle with ${id} not found`);
     } else {
       console.table(event.target.result);
     }
@@ -110,14 +106,14 @@ function getContactById(db, id) {
   };
 }
 
-function getContactByEmail(db, email) {
-  const txn = db.transaction("Contacts", "readonly");
-  const store = txn.objectStore("Contacts");
+function getCycleByDate(db, date) {
+  const txn = db.transaction("Cycles", "readonly");
+  const store = txn.objectStore("Cycles");
 
   // get the index from the Object Store
-  const index = store.index("email");
+  const index = store.index("date");
   // query by indexes
-  let query = index.get(email);
+  let query = index.get(date);
 
   // return the result object on success
   query.onsuccess = (event) => {
@@ -134,15 +130,15 @@ function getContactByEmail(db, email) {
   };
 }
 
-function getAllContacts(db) {
-  const txn = db.transaction("Contacts", "readonly");
-  const objectStore = txn.objectStore("Contacts");
+function getAllCycles(db) {
+  const txn = db.transaction("Cycles", "readonly");
+  const objectStore = txn.objectStore("Cycles");
 
   objectStore.openCursor().onsuccess = (event) => {
     let cursor = event.target.result;
     if (cursor) {
-      let contact = cursor.value;
-      console.log(contact);
+      let cycle = cursor.value;
+      console.log(cycle);
       // continue next record
       cursor.continue();
     }
@@ -153,12 +149,12 @@ function getAllContacts(db) {
   };
 }
 
-function deleteContact(db, id) {
+function deleteCycle(db, id) {
   // create a new transaction
-  const txn = db.transaction("Contacts", "readwrite");
+  const txn = db.transaction("Cycles", "readwrite");
 
   // get the Contacts object store
-  const store = txn.objectStore("Contacts");
+  const store = txn.objectStore("Cycles");
   //
   let query = store.delete(id);
 
@@ -178,3 +174,4 @@ function deleteContact(db, id) {
     db.close();
   };
 }
+})();
