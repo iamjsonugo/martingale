@@ -1,5 +1,4 @@
 //localStorage.clear();
-localStorage.setItem()
 
 //initial state
 let step = 1; //
