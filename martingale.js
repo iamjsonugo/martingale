@@ -1,9 +1,18 @@
 //localStorage.clear();
 
 //initial state
+const db = new Dexie("YetAnotherDB");
+db.version(2).stores({
+  day: "++id,date",
+  pattern: "++id,date,lossCounter,accumulatedLosses,workingBalance",
+});
+
 let step = 1; //
 let finalProfit = parseFloat(document.querySelector(".profit").value);
 let currentBalance = parseFloat(document.querySelector(".balance").value);
+let strategy = ""; //document.querySelector(".strategy").value;
+let tradePair = ""; //document.querySelector(".trade-pair").value;
+let workingBalance = parseFloat(document.querySelector(".balance").value);
 let accumulatedLosses = 0; //
 let lossCounter = 1; //
 let odd = parseFloat(document.querySelector(".odd").value);
@@ -14,6 +23,55 @@ let maxStep = "0";
 let maxAccountLoss = "0";
 
 function oneWin() {}
+
+let timestamp = new Date();
+function filterDaily(filterParam) {
+  document.querySelector(".tbody-2").innerHTML = "";
+    db.day.toArray().then(function (results) {
+      let data = results;
+      for (const row of data) {
+          document.querySelector(".tbody-2").innerHTML += `<tr>
+          <td>${row.id}</td>
+          <td style="min-width: 120px!important;">${row.date}</td>
+            <td>${row.strategy}</td>
+            <td>${row.maxStake.toFixed(2)}</td>
+            <td>${row.maxLossStreak.toFixed(2)}</td>
+            <td>${row.maxStep.toFixed(2)}</td>
+            <td>${row.maxAccountLoss.toFixed(2)}</td>
+            <td>${parseFloat(row.workingBalance).toFixed(2)}</td>
+            </tr>
+            <tr>
+            <td></td>
+            <td colspan="3">${row.time} </td>
+            <td colspan="4"> Trading Pair: ${row.tradePair}</td>
+            </tr>` 
+      }
+  });   
+}
+
+function filterMonthly(filterParam) {
+  document.querySelector(".tbody-3").innerHTML = "";
+    db.day.toArray().then(function (results) {
+      let data = results;
+      for (const row of data) {
+          document.querySelector(".tbody-2").innerHTML += `<tr>
+          <td>${row.id}</td>
+          <td style="min-width: 120px!important;">${row.date}</td>
+            <td>${row.strategy}</td>
+            <td>${row.maxStake.toFixed(2)}</td>
+            <td>${row.maxLossStreak.toFixed(2)}</td>
+            <td>${row.maxStep.toFixed(2)}</td>
+            <td>${row.maxAccountLoss.toFixed(2)}</td>
+            <td>${parseFloat(row.workingBalance).toFixed(2)}</td>
+            </tr>
+            <tr>
+            <td></td>
+            <td colspan="3">${row.time} </td>
+            <td colspan="4"> Trading Pair: ${row.tradePair}</td>
+            </tr>` 
+      }
+  });   
+}
 
 function calculateStake(outcome = false) {
   if (accumulatedLosses < 0) {
@@ -78,103 +136,93 @@ function calculateStake(outcome = false) {
     accumulatedLosses = results.accumulatedLosses;
     lossCounter = results.lossCounter;
     odd = results.odd;
-    
+
     let timestamp = new Date();
-    const  insertCycleData = {
+    const insertPatternData = {
       step: results.step,
-      date:  timestamp.toLocaleString(undefined, {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"}),
+      date: timestamp.toLocaleString(undefined, {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
       time: timestamp.toLocaleString(undefined, {
-                  hour: "2-digit",
-                  minute: "2-digit",}),
-       openingBal: results.openingBalance,
-       stake: results.stake,
-       outcome: results.outcome ? "Win" : "Lose",
-       pnl: results.pnl,
-       closingBal: results.currentBalance,
-       profit: results.finalProfit,
-       lossCounter: results.lossCounter,
-       accumulatedLosses: results.accumulatedLosses < 0 ? 0 : results.accumulatedLosses,
-       odd: results.odd,
-      // strategy: document.querySelector(".strategy").value,
-       //currencyPair: document.querySelector(".trade-pair").value
-      };
-      
-      console.log(JSON.stringify(insertCycleData));
-      
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      outcome: results.outcome ? "Win" : "Lose",
+      lossCounter: results.lossCounter,
+      strategy: strategy, //document.querySelector(".strategy").value,
+      currencyPair: tradePair, // document.querySelector(".trade-pair").value
+    };
+
+    try {
+      db.pattern
+        .add(insertPatternData)
+        .then(function () {
+          return db.pattern.toArray();
+        })
+        .then(function (results) {
+          console.log(`Pattern: ${JSON.stringify(results)}`);
+        });
+    } catch (e) {
+      console.log(`Error: ${e}`);
+    }
+
     //add to daily reports
     if (results.lossCounter < 1) {
       let timestamp = new Date();
-      function filterDaily(
-        param = timestamp.toLocaleString(undefined, {
+
+      const insertDailyData = {
+        date: timestamp.toLocaleString(undefined, {
           day: "2-digit",
           month: "short",
           year: "numeric",
-        })
-      ) {
-      document.querySelector(".tbody-2").innerHTML ="";
-        for (let i = 0; i < localStorage.length; i++) {
-          if (
-            param != JSON.parse(localStorage.getItem(localStorage.key(i)))[0]
-          ) {
-          } else {
-            let storedValue = localStorage.key(i);
-            document.querySelector(".tbody-2").innerHTML += `
-      <tr>
-      <td>${i+1}</td>
-      <td style="min-width: 120px!important;">${
-        JSON.parse(localStorage.getItem(storedValue))[0]
-      }</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[2]}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[4].toFixed(2)}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[5].toFixed(2)}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[6].toFixed(2)}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[7].toFixed(2)}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[8].toFixed(2)}</td>
-      </tr>
-      <tr>
-      <td></td>
-      <td colspan="2"> ${JSON.parse(localStorage.getItem(storedValue))[1]}</td>
-      <td colspan="4"> Trading Pair: ${
-        JSON.parse(localStorage.getItem(storedValue))[3]
-      }</td>
-      </tr>
-      `;
-          }
-        }
-      }
-      filterDaily();
+        }),
+        time: timestamp.toLocaleString(undefined, {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        strategy: "A/B",
+        tradePair: "CUR/COM",
+        maxStake: Math.max(...maxStake.split(",")),
+        maxLossStreak: Math.max(...maxLossStreak.split(",")),
+        maxStep: Math.max(...maxStep.split(",")),
+        maxAccountLoss: Math.max(...maxAccountLoss.split(",")),
+        workingBalance: workingBalance,
+      };
 
+      try {
+        db.day
+          .add(insertDailyData)
+          .then(function () {
+            return db.day.toArray();
+          })
+          .then(function (results) {
+            console.log(`Daily: ${JSON.stringify(results)}`);
+          });
+      } catch (e) {
+        console.log(`Error: ${e}`);
+      }
+
+      filterDaily();
+      return;
     }
-    return insertCycleData;
   }
 }
+filterDaily();
 
-function filterMonthly(
-  param = "Apr 2022"
-) {
-document.querySelector(".tbody-3").innerHTML ="";
-let trackHighestStep = [0];
-let trackHighestStoredValue = "";
+function filterMonthly(param = "Apr 2022") {
+  document.querySelector(".tbody-3").innerHTML = "";
   for (let i = 0; i < localStorage.length; i++) {
-    if (
-      param != "Apr 2022"
-    ) {
+    if (param != "Apr 2022") {
     } else {
       let storedValue = localStorage.key(i);
-      trackHighestStep.push(JSON.parse(localStorage.getItem(storedValue))[6]);
-      console.log("Highest step:" + Math.max(...trackHighestStep));
-
-      if (Math.max(...trackHighestStep) === JSON.parse(localStorage.getItem(storedValue))[6]) {
-        trackHighestStoredValue = JSON.parse(localStorage.getItem(storedValue));
-        document.querySelector(".tbody-3").innerHTML = `
+      document.querySelector(".tbody-3").innerHTML = `
 <tr>
-<td>${i+1}</td>
+<td>${i + 1}</td>
 <td style="min-width: 120px!important;">${
-  JSON.parse(localStorage.getItem(storedValue))[0]
-}</td>
+        JSON.parse(localStorage.getItem(storedValue))[0]
+      }</td>
 <td>${JSON.parse(localStorage.getItem(storedValue))[2]}</td>
 <td>${JSON.parse(localStorage.getItem(storedValue))[6].toFixed(2)}</td>
 <td>${JSON.parse(localStorage.getItem(storedValue))[7].toFixed(2)}</td>
@@ -184,46 +232,15 @@ let trackHighestStoredValue = "";
 <td></td>
 <td colspan="2"> ${JSON.parse(localStorage.getItem(storedValue))[1]}</td>
 <td colspan="3"> Trading Pair: ${
-  JSON.parse(localStorage.getItem(storedValue))[3]
-}</td>
+        JSON.parse(localStorage.getItem(storedValue))[3]
+      }</td>
 </tr>
 `;
-
-      } else {
-        
-      }
-
     }
   }
 }
 filterMonthly();
-console.log(calculateStake(false));
-for (let i = 0; i < localStorage.length; i++) {
-  
-    let storedValue = localStorage.key(i);
-    document.querySelector(".tbody-2").innerHTML += `
-      <tr>
-      <td>${i+1}</td>
-      <td style="min-width: 120px!important;">${
-      JSON.parse(localStorage.getItem(storedValue))[0]
-      }</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[2]}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[4].toFixed(2)}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[5].toFixed(2)}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[6].toFixed(2)}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[7].toFixed(2)}</td>
-      <td>${JSON.parse(localStorage.getItem(storedValue))[8].toFixed(2)}</td>
-      </tr>
-      <tr>
-      <td></td>
-      <td colspan="2"> ${JSON.parse(localStorage.getItem(storedValue))[1]}</td>
-      <td colspan="4"> Trading Pair: ${
-      JSON.parse(localStorage.getItem(storedValue))[3]
-      }</td>
-      </tr>
-      `;
-  
-}
+calculateStake(false);
 
 document.querySelector(".win-btn").addEventListener("click", (event) => {
   calculateStake(true);
@@ -274,7 +291,7 @@ function sortTable() {
     rows = table.rows;
     /* Loop through all table rows (except the
     first, which contains table headers): */
-    for (i = 1; i < (rows.length - 1); i++) {
+    for (i = 1; i < rows.length - 1; i++) {
       // Start by saying there should be no switching:
       shouldSwitch = false;
       /* Get the two elements you want to compare,
