@@ -6,6 +6,10 @@ db.version(1).stores({
   day: "++id,date,maxStep",
   pattern: "++id,date,lossCounter,accumulatedLosses,workingBalance",
 });
+db.version(2).stores({
+  day: "++id,date,maxStep",
+  pattern: "++id,date,lossCounter,accumulatedLosses",
+});
 
 let step = 1; //
 let finalProfit = parseFloat(document.querySelector(".profit").value);
@@ -28,7 +32,7 @@ function oneWin() {
       const insertDailyData = {
         date: timestamp.toLocaleString(undefined, {
           day: "2-digit",
-          month: "short",
+          month: "2-digit",
           year: "2-digit",
         }),
         time: timestamp.toLocaleString(undefined, {
@@ -37,17 +41,18 @@ function oneWin() {
         }),
         strategy: strategy,
         tradePair: tradePair,
-        maxStake: (finalProfit/(odd-(1-odd))),
+        maxStake: 1,
         maxLossStreak: 0,
         maxStep: 1,
         maxAccountLoss: 0,
         workingBalance: workingBalance,
       };
-
+console.log(insertDailyData)
       try {
         db.day
           .add(insertDailyData)
           .then(function () {
+            console.log(db.day.toArray())
             return db.day.toArray();
           });
       } catch (e) {
@@ -97,7 +102,6 @@ function refreshMonthly() {
     db.day.orderBy("maxStep").reverse().limit(5).toArray().then(function (results) {
       let data = results;
       for (const row of data) {
-
         document.querySelector(".tbody-3").innerHTML += `<tr>
           <td>${row.id}</td>
           <td style="min-width: 120px!important;">${row.date}</td>
@@ -112,8 +116,7 @@ function refreshMonthly() {
             <td></td>
             <td colspan="3">${row.time} </td>
             <td colspan="4"> Trading Pair: ${row.tradePair}</td>
-            </tr>`
-         
+            </tr>`         
       }
   });   
  
