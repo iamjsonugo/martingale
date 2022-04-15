@@ -1,12 +1,8 @@
 //localStorage.clear();
 
 //initial state
-const db = new Dexie("YetAnotherDB");
-db.version(2).stores({
-  day: "++id,date",
-  pattern: "++id,date,lossCounter,accumulatedLosses,workingBalance",
-});
-db.version(3).stores({
+const db = new Dexie("ProductionDB");
+db.version(1).stores({
   day: "++id,date,maxStep",
   pattern: "++id,date,lossCounter,accumulatedLosses,workingBalance",
 });
