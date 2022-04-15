@@ -27,30 +27,35 @@ function spa(param = "page-4") {
     document.querySelector(".page-4").style.display = "none";
     document.querySelector(".page-1").style.display = "block";
     document.querySelector(".page-5").style.display = "none";
+    document.querySelector(".fixed-bottom").style.display = "block";
   } else if (currentlyClicked === "page-2") {
     document.querySelector(".page-1").style.display = "none";
     document.querySelector(".page-3").style.display = "none";
     document.querySelector(".page-4").style.display = "none";
     document.querySelector(".page-2").style.display = "block";
     document.querySelector(".page-5").style.display = "none";
+    document.querySelector(".fixed-bottom").style.display = "none";
   } else if (currentlyClicked === "page-3") {
     document.querySelector(".page-1").style.display = "none";
     document.querySelector(".page-2").style.display = "none";
     document.querySelector(".page-4").style.display = "none";
     document.querySelector(".page-3").style.display = "block";
     document.querySelector(".page-5").style.display = "none";
+    document.querySelector(".fixed-bottom").style.display = "none";
   } else if (currentlyClicked === "page-4") {
     document.querySelector(".page-1").style.display = "none";
     document.querySelector(".page-2").style.display = "none";
     document.querySelector(".page-3").style.display = "none";
     document.querySelector(".page-4").style.display = "block";
     document.querySelector(".page-5").style.display = "none";
+    document.querySelector(".fixed-bottom").style.display = "none";
   } else {
     document.querySelector(".page-1").style.display = "none";
     document.querySelector(".page-2").style.display = "none";
     document.querySelector(".page-3").style.display = "none";
     document.querySelector(".page-4").style.display = "none";
     document.querySelector(".page-5").style.display = "block";
+    document.querySelector(".fixed-bottom").style.display = "none";
   }
 }
 spa();

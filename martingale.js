@@ -6,12 +6,16 @@ db.version(2).stores({
   day: "++id,date",
   pattern: "++id,date,lossCounter,accumulatedLosses,workingBalance",
 });
+db.version(3).stores({
+  day: "++id,date,maxStep",
+  pattern: "++id,date,lossCounter,accumulatedLosses,workingBalance",
+});
 
 let step = 1; //
 let finalProfit = parseFloat(document.querySelector(".profit").value);
 let currentBalance = parseFloat(document.querySelector(".balance").value);
-let strategy = ""; //document.querySelector(".strategy").value;
-let tradePair = ""; //document.querySelector(".trade-pair").value;
+let strategy = document.querySelector(".strategy").value;
+let tradePair = document.querySelector(".trade-pair").value;
 let workingBalance = parseFloat(document.querySelector(".balance").value);
 let accumulatedLosses = 0; //
 let lossCounter = 1; //
@@ -22,39 +26,83 @@ let maxLossStreak = "0";
 let maxStep = "0";
 let maxAccountLoss = "0";
 
-function oneWin() {}
+function oneWin() {
+  let timestamp = new Date();
+
+      const insertDailyData = {
+        date: timestamp.toLocaleString(undefined, {
+          day: "2-digit",
+          month: "short",
+          year: "2-digit",
+        }),
+        time: timestamp.toLocaleString(undefined, {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        strategy: strategy,
+        tradePair: tradePair,
+        maxStake: (finalProfit/(odd-(1-odd))),
+        maxLossStreak: 0,
+        maxStep: 1,
+        maxAccountLoss: 0,
+        workingBalance: workingBalance,
+      };
+
+      try {
+        db.day
+          .add(insertDailyData)
+          .then(function () {
+            return db.day.toArray();
+          });
+      } catch (e) {
+        console.log(`Error: ${e}`);
+      }
+      alert("End of Cycle!")
+      refreshDaily();
+      refreshMonthly();
+      return;
+}
 
 let timestamp = new Date();
-function filterDaily(filterParam) {
+function refreshDaily() {
+  document.querySelector(".tbody-2").innerHTML ="";
+  let param="";
+  param+=document.querySelector(".month-search").value+"/";
+  param+=document.querySelector(".day-search").value+"/";
+  param+=document.querySelector(".year-search").value; 
+
   document.querySelector(".tbody-2").innerHTML = "";
     db.day.toArray().then(function (results) {
       let data = results;
       for (const row of data) {
+        if(row.date!=param){}else{
           document.querySelector(".tbody-2").innerHTML += `<tr>
-          <td>${row.id}</td>
-          <td style="min-width: 120px!important;">${row.date}</td>
-            <td>${row.strategy}</td>
-            <td>${row.maxStake.toFixed(2)}</td>
-            <td>${row.maxLossStreak.toFixed(2)}</td>
-            <td>${row.maxStep.toFixed(2)}</td>
-            <td>${row.maxAccountLoss.toFixed(2)}</td>
-            <td>${parseFloat(row.workingBalance).toFixed(2)}</td>
-            </tr>
-            <tr>
-            <td></td>
-            <td colspan="3">${row.time} </td>
-            <td colspan="4"> Trading Pair: ${row.tradePair}</td>
-            </tr>` 
+        <td>${row.id}</td>
+        <td style="min-width: 120px!important;">${row.date}</td>
+          <td>${row.strategy}</td>
+          <td>${row.maxStake.toFixed(2)}</td>
+          <td>${row.maxLossStreak.toFixed(2)}</td>
+          <td>${row.maxStep.toFixed(2)}</td>
+          <td>${row.maxAccountLoss.toFixed(2)}</td>
+          <td>${parseFloat(row.workingBalance).toFixed(2)}</td>
+          </tr>
+          <tr>
+          <td></td>
+          <td colspan="3">${row.time} </td>
+          <td colspan="4"> Trading Pair: ${row.tradePair}</td>
+          </tr>`
+        }
       }
   });   
 }
 
-function filterMonthly(filterParam) {
-  document.querySelector(".tbody-3").innerHTML = "";
-    db.day.toArray().then(function (results) {
+function refreshMonthly() {
+  document.querySelector(".tbody-3").innerHTML ="";
+    db.day.orderBy("maxStep").reverse().limit(5).toArray().then(function (results) {
       let data = results;
       for (const row of data) {
-          document.querySelector(".tbody-2").innerHTML += `<tr>
+
+        document.querySelector(".tbody-3").innerHTML += `<tr>
           <td>${row.id}</td>
           <td style="min-width: 120px!important;">${row.date}</td>
             <td>${row.strategy}</td>
@@ -68,10 +116,35 @@ function filterMonthly(filterParam) {
             <td></td>
             <td colspan="3">${row.time} </td>
             <td colspan="4"> Trading Pair: ${row.tradePair}</td>
-            </tr>` 
+            </tr>`
+         
       }
   });   
+ 
+ 
+  db.day.orderBy("maxStep").limit(5).toArray().then(function (results) {
+    let data = results;
+    for (const row of data) {
+          document.querySelector(".tbody-4").innerHTML += `<tr>
+        <td>${row.id}</td>
+        <td style="min-width: 120px!important;">${row.date}</td>
+          <td>${row.strategy}</td>
+          <td>${row.maxStake.toFixed(2)}</td>
+          <td>${row.maxLossStreak.toFixed(2)}</td>
+          <td>${row.maxStep.toFixed(2)}</td>
+          <td>${row.maxAccountLoss.toFixed(2)}</td>
+          <td>${parseFloat(row.workingBalance).toFixed(2)}</td>
+          </tr>
+          <tr>
+          <td></td>
+          <td colspan="3">${row.time} </td>
+          <td colspan="4"> Trading Pair: ${row.tradePair}</td>
+          </tr>`
+        }
+       
+});  
 }
+
 
 function calculateStake(outcome = false) {
   if (accumulatedLosses < 0) {
@@ -142,8 +215,8 @@ function calculateStake(outcome = false) {
       step: results.step,
       date: timestamp.toLocaleString(undefined, {
         day: "2-digit",
-        month: "short",
-        year: "numeric",
+        month: "2-digit",
+        year: "2-digit",
       }),
       time: timestamp.toLocaleString(undefined, {
         hour: "2-digit",
@@ -151,8 +224,8 @@ function calculateStake(outcome = false) {
       }),
       outcome: results.outcome ? "Win" : "Lose",
       lossCounter: results.lossCounter,
-      strategy: strategy, //document.querySelector(".strategy").value,
-      currencyPair: tradePair, // document.querySelector(".trade-pair").value
+      strategy: strategy, 
+      currencyPair: tradePair,
     };
 
     try {
@@ -160,9 +233,6 @@ function calculateStake(outcome = false) {
         .add(insertPatternData)
         .then(function () {
           return db.pattern.toArray();
-        })
-        .then(function (results) {
-          console.log(`Pattern: ${JSON.stringify(results)}`);
         });
     } catch (e) {
       console.log(`Error: ${e}`);
@@ -175,15 +245,15 @@ function calculateStake(outcome = false) {
       const insertDailyData = {
         date: timestamp.toLocaleString(undefined, {
           day: "2-digit",
-          month: "short",
-          year: "numeric",
+          month: "2-digit",
+          year: "2-digit",
         }),
         time: timestamp.toLocaleString(undefined, {
           hour: "2-digit",
           minute: "2-digit",
         }),
-        strategy: "A/B",
-        tradePair: "CUR/COM",
+        strategy: strategy,
+        tradePair: tradePair,
         maxStake: Math.max(...maxStake.split(",")),
         maxLossStreak: Math.max(...maxLossStreak.split(",")),
         maxStep: Math.max(...maxStep.split(",")),
@@ -196,57 +266,37 @@ function calculateStake(outcome = false) {
           .add(insertDailyData)
           .then(function () {
             return db.day.toArray();
-          })
-          .then(function (results) {
-            console.log(`Daily: ${JSON.stringify(results)}`);
           });
       } catch (e) {
         console.log(`Error: ${e}`);
       }
 
-      filterDaily();
+      refreshDaily();
+      refreshMonthly();
       return;
     }
   }
 }
-filterDaily();
+refreshDaily();
+refreshMonthly()
 
-function filterMonthly(param = "Apr 2022") {
-  document.querySelector(".tbody-3").innerHTML = "";
-  for (let i = 0; i < localStorage.length; i++) {
-    if (param != "Apr 2022") {
-    } else {
-      let storedValue = localStorage.key(i);
-      document.querySelector(".tbody-3").innerHTML = `
-<tr>
-<td>${i + 1}</td>
-<td style="min-width: 120px!important;">${
-        JSON.parse(localStorage.getItem(storedValue))[0]
-      }</td>
-<td>${JSON.parse(localStorage.getItem(storedValue))[2]}</td>
-<td>${JSON.parse(localStorage.getItem(storedValue))[6].toFixed(2)}</td>
-<td>${JSON.parse(localStorage.getItem(storedValue))[7].toFixed(2)}</td>
-<td>${JSON.parse(localStorage.getItem(storedValue))[8].toFixed(2)}</td>
-</tr>
-<tr>
-<td></td>
-<td colspan="2"> ${JSON.parse(localStorage.getItem(storedValue))[1]}</td>
-<td colspan="3"> Trading Pair: ${
-        JSON.parse(localStorage.getItem(storedValue))[3]
-      }</td>
-</tr>
-`;
-    }
-  }
-}
-filterMonthly();
+
 calculateStake(false);
 
 document.querySelector(".win-btn").addEventListener("click", (event) => {
   calculateStake(true);
+  refreshDaily();
+  refreshMonthly();
 });
 document.querySelector(".lose-btn").addEventListener("click", (event) => {
   calculateStake(false);
+  refreshMonthly();
+  refreshDaily();
+});
+document.querySelector(".one-win-btn").addEventListener("click", (event) => {
+  oneWin();
+  refreshMonthly();
+  refreshDaily();
 });
 document.querySelector(".refresh-btn").addEventListener("click", (event) => {
   step = 1; //
@@ -280,38 +330,3 @@ for (const input of onChangeInputs) {
     calculateStake(false);
   });
 }
-
-function sortTable() {
-  var table, rows, switching, i, x, y, shouldSwitch;
-  table = document.querySelector("tbody");
-  switching = true;
-  /* Make a loop that will continue until
-  no switching has been done: */
-  while (switching) {
-    rows = table.rows;
-    /* Loop through all table rows (except the
-    first, which contains table headers): */
-    for (i = 1; i < rows.length - 1; i++) {
-      // Start by saying there should be no switching:
-      shouldSwitch = false;
-      /* Get the two elements you want to compare,
-      one from current row and one from the next: */
-      x = rows[i].getElementsByTagName("TD")[0];
-      y = rows[i + 1].getElementsByTagName("TD")[0];
-      // Check if the two rows should switch place:
-      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-        // If so, mark as a switch and break the loop:
-        shouldSwitch = true;
-        break;
-      }
-    }
-    if (shouldSwitch) {
-      /* If a switch has been marked, make the switch
-      and mark that a switch has been done: */
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-    }
-  }
-}
-
-//sortTable();
