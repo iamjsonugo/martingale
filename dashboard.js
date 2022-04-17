@@ -18,7 +18,7 @@ document.querySelector(".page-button-5").addEventListener("click", (event) => {
   spa("page-5");
 });
 
-function spa(param = "page-4") {
+function spa(param = "page-1") {
   let currentlyClicked = param;
 
   if (currentlyClicked === "page-1") {

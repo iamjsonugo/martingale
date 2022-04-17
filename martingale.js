@@ -26,6 +26,16 @@ let maxLossStreak = "0";
 let maxStep = "0";
 let maxAccountLoss = "0";
 
+let timestamp = new Date();
+defaultDate = timestamp.toLocaleString(undefined, {
+  month: "2-digit",
+  day: "2-digit",
+  year: "numeric",
+});
+defaultDate = defaultDate.split("/")
+document.querySelector(".date-search").value = ""+defaultDate[2]+"-"+defaultDate[0]+"-"+defaultDate[1];
+
+
 function oneWin() {
   let timestamp = new Date();
 
@@ -47,12 +57,11 @@ function oneWin() {
         maxAccountLoss: 0,
         workingBalance: workingBalance,
       };
-console.log(insertDailyData)
+
       try {
         db.day
           .add(insertDailyData)
           .then(function () {
-            console.log(db.day.toArray())
             return db.day.toArray();
           });
       } catch (e) {
@@ -64,13 +73,12 @@ console.log(insertDailyData)
       return;
 }
 
-let timestamp = new Date();
 function refreshDaily() {
   document.querySelector(".tbody-2").innerHTML ="";
-  let param="";
-  param+=document.querySelector(".month-search").value+"/";
-  param+=document.querySelector(".day-search").value+"/";
-  param+=document.querySelector(".year-search").value; 
+  let param;
+  param = document.querySelector(".date-search").value;
+  param = param.split("-");
+  param = param[1]+"/"+param[2]+"/"+param[0].slice(2);
 
   document.querySelector(".tbody-2").innerHTML = "";
     db.day.toArray().then(function (results) {
@@ -99,9 +107,15 @@ function refreshDaily() {
 
 function refreshMonthly() {
   document.querySelector(".tbody-3").innerHTML ="";
-    db.day.orderBy("maxStep").reverse().limit(5).toArray().then(function (results) {
+  let param;
+  param = document.querySelector(".date-search").value;
+  param = param.split("-");
+  param = param[1]+"/"+param[2]+"/"+param[0].slice(2);
+
+    db.day.orderBy("maxStep").reverse().toArray().then(function (results) {
       let data = results;
       for (const row of data) {
+        if(row.date.slice(0,2)!=param.slice(0,2)){continue;}
         document.querySelector(".tbody-3").innerHTML += `<tr>
           <td>${row.id}</td>
           <td style="min-width: 120px!important;">${row.date}</td>
@@ -119,29 +133,7 @@ function refreshMonthly() {
             </tr>`         
       }
   });   
- 
-  document.querySelector(".tbody-4").innerHTML ="";
-  db.day.orderBy("maxStep").limit(5).toArray().then(function (results) {
-    let data = results;
-    for (const row of data) {
-          document.querySelector(".tbody-4").innerHTML += `<tr>
-        <td>${row.id}</td>
-        <td style="min-width: 120px!important;">${row.date}</td>
-          <td>${row.strategy}</td>
-          <td>${row.maxStake.toFixed(2)}</td>
-          <td>${row.maxLossStreak.toFixed(2)}</td>
-          <td>${row.maxStep.toFixed(2)}</td>
-          <td>${row.maxAccountLoss.toFixed(2)}</td>
-          <td>${parseFloat(row.workingBalance).toFixed(2)}</td>
-          </tr>
-          <tr>
-          <td></td>
-          <td colspan="3">${row.time} </td>
-          <td colspan="4"> Trading Pair: ${row.tradePair}</td>
-          </tr>`
-        }
-       
-});  
+  
 }
 
 
@@ -240,6 +232,8 @@ function calculateStake(outcome = false) {
 
     //add to daily reports
     if (results.lossCounter < 1) {
+
+
       let timestamp = new Date();
 
       const insertDailyData = {
@@ -330,3 +324,4 @@ for (const input of onChangeInputs) {
     calculateStake(false);
   });
 }
+
