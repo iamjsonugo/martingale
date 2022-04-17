@@ -120,7 +120,7 @@ function refreshMonthly() {
       }
   });   
  
- 
+  document.querySelector(".tbody-4").innerHTML ="";
   db.day.orderBy("maxStep").limit(5).toArray().then(function (results) {
     let data = results;
     for (const row of data) {
@@ -194,9 +194,10 @@ function calculateStake(outcome = false) {
     </tr>
     `;
 
+    let nextStake = (finalProfit + accumulatedLosses / lossCounter) / (odd - 1);
     document.querySelector(
       "#next-stake"
-    ).innerHTML = `Next Stake: ${results.stake.toFixed(2)}.`;
+    ).innerHTML = `Next Stake: ${nextStake.toFixed(2)}.`;
     document.querySelector("#amount-lost").innerHTML = `Next Total Losses: ${
       results.accumulatedLosses < 0 ? 0 : results.accumulatedLosses.toFixed(2)
     }.`;
