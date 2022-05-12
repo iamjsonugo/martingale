@@ -1,14 +1,11 @@
 //localStorage.clear();
 
 //initial state
-const db = new Dexie("ProductionDB");
+const db = new Dexie("ProbabilityDb");
 db.version(1).stores({
   day: "++id,date,maxStep",
-  pattern: "++id,date,lossCounter,accumulatedLosses,workingBalance",
-});
-db.version(2).stores({
-  day: "++id,date,maxStep",
   pattern: "++id,date,lossCounter,accumulatedLosses",
+  season: "++id,date,data"
 });
 
 let step = 1; //

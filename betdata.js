@@ -1,7 +1,12 @@
 
 
-function betData() {
+function sixOddReport() {
+
+}
+
+function betData(search) {
   let text = document.querySelector(".bet-data-textarea").value;
+  
   let timestamp = new Date();
 
   text = text.replace(/able\n/i, "@");
@@ -45,17 +50,58 @@ function betData() {
    }
   }
   season.splice(0,1)
-  console.table(season)
-  document.querySelector(".bet-data-textarea").value = JSON.stringify(season, null, 4);
-    const insertBetData = {
+  document.querySelector(".bet-data-textarea").value = JSON.stringify(season,null,4);
+    const insertSeason = {
         date: timestamp.toLocaleString(undefined, {
           day: "2-digit",
           month: "2-digit",
           year: "2-digit",
-        })
+        }),
+        data: JSON.stringify(season),
     };
+
+        /*db.season
+          .add(insertSeason)
+          .then(function () {
+            alert("Bet Data Saved!");
+          });
+        */
+          function teamReport(){
+            let reports = {};
+            reports.winData = [];
+            reports.positionRow = [];
+            reports.positionColumn = [];
+            reports.teamARow = [];
+            reports.teamAColumn = [];
+            reports.teamBRow = [];
+            reports.teamBColumn = [];
+            
+            for (let i = 0; i < season.length; i++) {
+              for (let j = 0; j < season[i].length; j++) {
+                const match = season[i][j];
+                score = match.replace(/#/ig,"")
+                reportScore = score;
+                score = score.split("-")
+                teamAName = score[0].replace(/\d/ig,"");
+                teamBName = score[1].replace(/\d/ig,"");
+                teamA = score[0].replace(/\D/ig,"");
+                teamB = score[1].replace(/\D/ig,"");
+                position = j+1;
+                week = i+1;
+                //console.log(week);
+                //Correct Score
+                if(`${teamA}-${teamB}` === "2-1"){
+                  reports.winData.push(`WK${week}: ${position} ${reportScore}`);
+                } else {
+                  console.log("No Correct Score found");
+                }
+                              }
+            }
+            console.table(reports.winData)
+        }
+          teamReport();
 }
-  
+
 document.querySelector(".bet-data-btn").addEventListener("click", (event) => {
   betData();
 });
