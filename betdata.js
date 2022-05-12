@@ -1,4 +1,4 @@
-function betData(search) {
+function betData() {
   let text = document.querySelector(".bet-data-textarea").value;
 
   let timestamp = new Date();
@@ -49,11 +49,8 @@ function betData(search) {
     }
   }
   season.splice(0, 1);
-  document.querySelector(".bet-data-textarea").value = JSON.stringify(
-    season,
-    null,
-    4
-  );
+
+  /* 
   const insertSeason = {
     date: timestamp.toLocaleString(undefined, {
       day: "2-digit",
@@ -63,55 +60,60 @@ function betData(search) {
     data: JSON.stringify(season),
   };
 
-  /*db.season
+ db.season
           .add(insertSeason)
           .then(function () {
             alert("Bet Data Saved!");
           });
-        */
-  let reports = {};
+  */
+    let reports = {};
+    //process winData
+    reports.winData = [];
+    reports.positionData = [];
 
-  //process winData
-  reports.winData = [];
-  for (let i = 0; i < season.length; i++) {
-    for (let j = 0; j < season[i].length; j++) {
-      const match = season[i][j];
-      let score = match.replace(/#/gi, "");
-      let reportScore = score;
-      score = score.split("-");
-      let teamAName = score[0].replace(/\d/gi, "");
-      let teamBName = score[1].replace(/\d/gi, "");
-      let teamA = score[0].replace(/\D/gi, "");
-      let teamB = score[1].replace(/\D/gi, "");
-      let position = j + 1;
-      let week = i + 1;
-
-      //Correct Score
-      if (`${teamA}-${teamB}` === "2-1") {
-        reports.winData.push(`WK${week}: ${position} ${reportScore}`);
+function processPosition(param){
+      for (let i = 0; i < season.length; i++) {
+        for (let j = 0; j < season[i].length; j++) {
+          const match = season[i][param-1];
+          let score = match.replace(/#/gi, "");
+          let reportScore = score;
+          score = score.split("-");
+          let teamAName = score[0].replace(/\d/gi, "");
+          let teamBName = score[1].replace(/\d/gi, "");
+          let teamA = score[0].replace(/\D/gi, "");
+          let teamB = score[1].replace(/\D/gi, "");
+          let position = param ;
+          let week = i + 1;
+          
+          //Correct Score
+          if (`${teamA}-${teamB}` === "1-1") {
+            reports.winData.push(`WK${week}: ${position} ${reportScore}`);
+          }
+        }
       }
-    }
-  }
 
-  //process position
-  let currentWeek = 0;
-  let position = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  for (let i = 0; i < reports.winData.length; i++) {
-    const match = reports.winData[i];
-    let matchWeek = match.split(":")[0];
-    let matchOutcome = match.split(":")[1];
-    matchWeek = parseInt(matchWeek.replace(/WK/, ""));
-    matchOutcome = parseInt(matchOutcome.replace(/ /, " "));
-    if (matchOutcome === 1) {
+    let currentWeek = 0;
+    let oldWeek = 0;
+    for (let i = 0; i < reports.winData.length; i++) {
+      const match = reports.winData[i]; //
+      let matchWeek = match.split(":")[0];
+      matchWeek = parseInt(matchWeek.replace(/WK/, ""));
       if (currentWeek === matchWeek) {
         continue;
       }
+      oldWeek = currentWeek;
       currentWeek = matchWeek;
-      console.log(matchWeek + "&" + matchOutcome);
+      let lossStreak = currentWeek - oldWeek;
+      reports.positionData([match,lossStreak-1]);
     }
+    console.log(reports.positionData)
   }
-}
+  processPosition(1)
+} 
+
 
 document.querySelector(".bet-data-btn").addEventListener("click", (event) => {
+
   betData();
+
 });
