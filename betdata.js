@@ -1,9 +1,20 @@
+let positionCount = [];
+let streakCount = [];
+let rawData = document.querySelector(".bet-data-textarea").value;
+let timeSaved = "";
+let totalMatches = 0;
+let final = {
+  positionCount: positionCount,
+  streakCount: streakCount,
+  rawData: rawData,
+  timeSaved: timeSaved,
+};
 
 function betData() {
   let text = document.querySelector(".bet-data-textarea").value;
 
   let timestamp = new Date();
-
+  timeSaved = timestamp;
   text = text.replace(/able\n/i, "@");
   text = text.split("@")[1];
   text = text
@@ -67,31 +78,34 @@ function betData() {
             alert("Bet Data Saved!");
           });
   */
-    let reports = {};
-    //process winData
-    reports.winData = [];
-    reports.positionData = [];
-    reports.saveData = [];//db
-    reports.firstTwoWins = [];//db
 
-function processPosition(param,print){
-      for (let i = 0; i < season.length; i++) {
-        for (let j = 0; j < season[i].length; j++) {
-          const match = season[i][param-1];
-          let score = match.replace(/#/gi, "");
-          let reportScore = score;
-          score = score.split("-");
-          let teamA = score[0].replace(/\D/gi, "");
-          let teamB = score[1].replace(/\D/gi, "");
-          let position = param ;
-          let week = i + 1;
-          
-          //Correct Score
-          if (`${teamA}-${teamB}` === "1-1") {
-            reports.winData.push(`WK${week}: ${position} ${reportScore}`);
-          }
+  let reports = {};
+  //process winData
+  reports.winData = [];
+  reports.positionData = [];
+  reports.saveData = []; //db
+
+  function processPosition(param, print) {
+    for (let i = 0; i < season.length; i++) {
+      for (let j = 0; j < season[i].length; j++) {
+        const match = season[i][param - 1];
+        let score = match.replace(/#/gi, "");
+        let reportScore = score;
+        score = score.split("-");
+        let teamA = score[0].replace(/\D/gi, "");
+        let teamB = score[1].replace(/\D/gi, "");
+        let teamAName = score[0].replace(/\d/gi, "");
+        let teamBName = score[1].replace(/\d/gi, "");
+        let position = param;
+        let week = i + 1;
+
+        //Correct Score
+        totalMatches += 1;
+        if (`${teamA}-${teamB}` === "3-1") {
+          reports.winData.push(`WK${week}: ${position} ${reportScore}`);
         }
       }
+    }
 
     let currentWeek = 0;
     let oldWeek = 0;
@@ -99,9 +113,9 @@ function processPosition(param,print){
       const match = reports.winData[i]; //
       let matchWeek = match.split(":")[0];
       let pos = match.split(":")[1];
-      pos = pos.replace(/\w\w\w\d-/,"")
-      pos = pos.replace(/\d\w\w\w/,"")
-      pos = pos.replace(/\s/,"")
+      pos = pos.replace(/\w\w\w\d-/, "");
+      pos = pos.replace(/\d\w\w\w/, "");
+      pos = pos.replace(/\s/, "");
       matchWeek = parseInt(matchWeek.replace(/WK/, ""));
       if (currentWeek === matchWeek) {
         continue;
@@ -109,40 +123,89 @@ function processPosition(param,print){
       oldWeek = currentWeek;
       currentWeek = matchWeek;
       let lossStreak = currentWeek - oldWeek;
-      reports.positionData.push([match, pos, " > ", `<b>${lossStreak-1}</b>`]);
+      positionCount.push(pos);
+      streakCount.push(lossStreak - 1);
+      reports.positionData.push([
+        match,
+        pos,
+        " > ",
+        `<b>${lossStreak - 1}</b>`,
+      ]);
     }
-    if(print==true){
+    if (print == true) {
       reports.saveData = reports.positionData;
-    } 
-    reports.winData = []
+    }
+    reports.winData = [];
   }
-  processPosition(1,true)
-  processPosition(2)
-  processPosition(3)
-  processPosition(4)
-  processPosition(5)
-  processPosition(6)
-  processPosition(7)
-  processPosition(8)
-  processPosition(9)
-  processPosition(10)
-  console.table(reports.saveData)
-
+  processPosition(1, true);
+  processPosition(2);
+  processPosition(3);
+  processPosition(4);
+  processPosition(5);
+  processPosition(6);
+  processPosition(7);
+  processPosition(8);
+  processPosition(9);
+  processPosition(10);
 
   document.querySelector(".betdata-table").innerHTML = "";
+  let i = 0;
   for (const row of reports.saveData) {
-    document.querySelector(".betdata-table").innerHTML += `<tr>
-          <td>${row[1]}</td>
-          <td>${row[0]}</td>
+    i += 1;
+    document.querySelector(".betdata-table").innerHTML += `
+    <tr>
+          <td>${i}</td>
+          <td>No. ${row[1]}</td>
+          <td>${row[0].replace(/: \d\d/, ":").replace(/: \d/, ":")}</td>
           <td>${row[3]}</td>
-          </tr>`
-        }
-  
-} 
+    </tr>
+`;
+  }
 
+  let chars = positionCount;
+
+  let uniqueChars = [];
+  chars.forEach((c) => {
+    if (!uniqueChars.includes(c)) {
+      uniqueChars.push(c);
+    }
+  });
+
+  final = {
+    positionCount: uniqueChars,
+    streakCount: streakCount.sort(function (a, b) {
+      return b - a;
+    }),
+    rawData: rawData,
+    timeProcessed: timestamp,
+  };
+  document.querySelector(".betdetails-table").innerHTML = "";
+  document.querySelector(".betdetails-table").innerHTML += `
+    <tr>
+          <td>SN list</td>
+          <td>${final.positionCount}</td>
+    </tr>
+    <tr>
+          <td>Loss Streaks</td>
+          <td>${final.streakCount}</td>
+    </tr>
+    <tr>
+          <td>Time Processed</td>
+          <td>${final.timeProcessed}</td>
+    </tr>
+    <tr>
+          <td>Week</td>
+          <td>${totalMatches/100}</td>
+    </tr>
+`;
+  totalMatches = 0;
+  winCount = 0;
+  positionCount = [];
+  streakCount = [];
+  rawData = "";
+  timeSaved = "";
+}
 
 document.querySelector(".bet-data-btn").addEventListener("click", (event) => {
-
   betData();
-  
 });

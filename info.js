@@ -138,3 +138,11 @@ Output:
  Location: "Sydney",
  Age: "25"
 }
+
+winCount
+positionCount
+streakCount
+teamACount
+teamBCount
+processedData
+
