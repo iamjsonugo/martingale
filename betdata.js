@@ -1,3 +1,4 @@
+
 function betData() {
   let text = document.querySelector(".bet-data-textarea").value;
 
@@ -70,16 +71,16 @@ function betData() {
     //process winData
     reports.winData = [];
     reports.positionData = [];
+    reports.saveData = [];//db
+    reports.firstTwoWins = [];//db
 
-function processPosition(param){
+function processPosition(param,print){
       for (let i = 0; i < season.length; i++) {
         for (let j = 0; j < season[i].length; j++) {
           const match = season[i][param-1];
           let score = match.replace(/#/gi, "");
           let reportScore = score;
           score = score.split("-");
-          let teamAName = score[0].replace(/\d/gi, "");
-          let teamBName = score[1].replace(/\d/gi, "");
           let teamA = score[0].replace(/\D/gi, "");
           let teamB = score[1].replace(/\D/gi, "");
           let position = param ;
@@ -97,6 +98,10 @@ function processPosition(param){
     for (let i = 0; i < reports.winData.length; i++) {
       const match = reports.winData[i]; //
       let matchWeek = match.split(":")[0];
+      let pos = match.split(":")[1];
+      pos = pos.replace(/\w\w\w\d-/,"")
+      pos = pos.replace(/\d\w\w\w/,"")
+      pos = pos.replace(/\s/,"")
       matchWeek = parseInt(matchWeek.replace(/WK/, ""));
       if (currentWeek === matchWeek) {
         continue;
@@ -104,16 +109,40 @@ function processPosition(param){
       oldWeek = currentWeek;
       currentWeek = matchWeek;
       let lossStreak = currentWeek - oldWeek;
-      reports.positionData([match,lossStreak-1]);
+      reports.positionData.push([match, pos, " > ", `<b>${lossStreak-1}</b>`]);
     }
-    console.log(reports.positionData)
+    if(print==true){
+      reports.saveData = reports.positionData;
+    } 
+    reports.winData = []
   }
-  processPosition(1)
+  processPosition(1,true)
+  processPosition(2)
+  processPosition(3)
+  processPosition(4)
+  processPosition(5)
+  processPosition(6)
+  processPosition(7)
+  processPosition(8)
+  processPosition(9)
+  processPosition(10)
+  console.table(reports.saveData)
+
+
+  document.querySelector(".betdata-table").innerHTML = "";
+  for (const row of reports.saveData) {
+    document.querySelector(".betdata-table").innerHTML += `<tr>
+          <td>${row[1]}</td>
+          <td>${row[0]}</td>
+          <td>${row[3]}</td>
+          </tr>`
+        }
+  
 } 
 
 
 document.querySelector(".bet-data-btn").addEventListener("click", (event) => {
 
   betData();
-
+  
 });
