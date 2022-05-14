@@ -60,24 +60,7 @@ function betData() {
       season.push(week);
     }
   }
-  season.splice(0, 1);
-
-  /* 
-  const insertSeason = {
-    date: timestamp.toLocaleString(undefined, {
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
-    }),
-    data: JSON.stringify(season),
-  };
-
- db.season
-          .add(insertSeason)
-          .then(function () {
-            alert("Bet Data Saved!");
-          });
-  */
+  season.splice(0, 1);/* ideal data without unwanted data*/
 
   let reports = {};
   //process winData
@@ -99,11 +82,21 @@ function betData() {
         let position = param;
         let week = i + 1;
 
-        //Correct Score
+        //Correct Score 1-1
         totalMatches += 1;
-        if (`${teamA}-${teamB}` === "3-1") {
+        if (`${teamA}-${teamB}` === "1-1") {
           reports.winData.push(`WK${week}: ${position} ${reportScore}`);
         }
+        /*
+        //UN 1.5
+        if (teamA+teamB < 1.5) {
+          reports.winData.push(`WK${week}: ${position} ${reportScore}`);
+        }        
+        //Draw
+        totalMatches += 1;
+        if (teamA-teamB === 0) {
+          reports.winData.push(`WK${week}: ${position} ${reportScore}`);
+        }*/
       }
     }
 
@@ -162,42 +155,67 @@ function betData() {
 `;
   }
 
-  let chars = positionCount;
+  const a = [4,"a","a","a","a","a","a","a","a",6,3,4,3]
 
-  let uniqueChars = [];
-  chars.forEach((c) => {
-    if (!uniqueChars.includes(c)) {
-      uniqueChars.push(c);
-    }
-  });
+  function count_duplicate(a){
+   let counts = {}
+  
+   for(let i =0; i < a.length; i++){ 
+       if (counts[a[i]]){
+       counts[a[i]] += 1
+       } else {
+       counts[a[i]] = 1
+       }
+      }  
+      let data = [];
+      for (let prop in counts){
+          if (counts[prop] >= 1){
+
+              data.push("("+prop + "-" + counts[prop] + ")")
+          }
+      }
+    return(data)
+  }
+  
+  console.log(count_duplicate(a))
 
   final = {
-    positionCount: uniqueChars,
-    streakCount: streakCount.sort(function (a, b) {
-      return b - a;
-    }),
+    positionCount: count_duplicate(positionCount),
+    streakCount: count_duplicate(streakCount),
     rawData: rawData,
     timeProcessed: timestamp,
   };
   document.querySelector(".betdetails-table").innerHTML = "";
   document.querySelector(".betdetails-table").innerHTML += `
     <tr>
-          <td>SN list</td>
+          <td>No.</td>
           <td>${final.positionCount}</td>
+          <td>${final.positionCount.length}</td>
     </tr>
     <tr>
           <td>Loss Streaks</td>
           <td>${final.streakCount}</td>
+          <td>${final.streakCount.length}</td>
     </tr>
     <tr>
           <td>Time Processed</td>
           <td>${final.timeProcessed}</td>
+          <td></td>
     </tr>
     <tr>
-          <td>Week</td>
-          <td>${totalMatches/100}</td>
+          <td>Season No </td>
+          <td>${Math.floor(Math.random() * 10) + 1}</td>
+          <td></td>
     </tr>
 `;
+  const insertSeason = {
+    timestamp: new Date(),
+    data: final.rawData,
+  };
+    db.season.add(insertSeason).then(function () {
+      //alert("Bet Data Saved!");
+    });
+  
   totalMatches = 0;
   winCount = 0;
   positionCount = [];
@@ -209,3 +227,15 @@ function betData() {
 document.querySelector(".bet-data-btn").addEventListener("click", (event) => {
   betData();
 });
+
+document.querySelector(".tbody-2").innerHTML = "";
+const oneWeekAgo = new Date(Date.now() - 60*60*1000*24*7);
+console.log(oneWeekAgo)
+db.season.where("id").below(50).toArray().then(function (results) {
+  let data = results;
+  console.log(results)
+  for (const row of data) {
+      //document.querySelector(".tbody-2").innerHTML += `<tr>
+    console.log(season);
+  }
+});   

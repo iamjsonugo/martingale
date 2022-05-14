@@ -2,7 +2,7 @@
 
 //initial state
 const db = new Dexie("ProbabilityDb");
-db.version(1).stores({
+db.version(3).stores({
   day: "++id,date,maxStep",
   pattern: "++id,date,lossCounter,accumulatedLosses",
   season: "++id,date,data"
