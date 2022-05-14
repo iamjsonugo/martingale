@@ -134,11 +134,7 @@ Output:
  Age: "25"
 }
 
-1 win per season
-5 seasons per day
-6 days per week
-withdraw 1/3 as profit
-restart
+
 
 
 
