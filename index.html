@@ -130,9 +130,8 @@
     <main class="container">
       <h3>Paste Raw Data</h3>
 
-<textarea rows="2" class="form-control bet-data-textarea" aria-label="With textarea">
-</textarea>
-<button class="w-100 btn btn-md btn-primary bet-data-btn" type="button"> Save Data</button>
+<textarea rows="2" class="form-control bet-data-textarea" aria-label="With textarea"></textarea>
+<button class="w-100 btn btn-md btn-primary save-data-btn" type="button"> Save Data</button>
 <br>
 <br>
 <h3>Season Details</h3>
@@ -140,9 +139,9 @@
   <table style="text-align:left;" class="nav-header table table-bordered table-large">
     <thead>
       <tr>
-        <th scope="col" ><button class="btn w-100 btn-md btn-primary float-sm-left prev-btn" type="button">Prev</button></th>
-        <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right recent-btn" type="button">Recent</button></th>
-        <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right process-btn" type="button">Process</button></th>
+        <th scope="col" ></th>
+        <th scope="col"></th>
+        <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right process-data-btn" type="button">Process</button></th>
       </tr>
     </thead>
     <tbody class="nav-table">
@@ -165,22 +164,17 @@
             </tbody>
           </table>
         </div>
-      <h3>Calculate Stake</h3>
+      <h3>Stake List</h3>
 <div class="table-responsive">
   <table style="text-align:left;" class="stake-header table table-bordered table-large">
     <thead>
       <tr>
-        <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right reset-btn" type="button">Reset</button></th>
-        <th scope="col" ><button class="btn w-100 btn-md btn-primary float-sm-left stake-btn" type="button">Next Stake</button></th>
+        <th scope="col"><button style="display: none;" class="btn w-100 btn-md btn-primary float-sm-right reset-btn" type="button">Reset</button></th>
+        <th scope="col" ><button class="btn w-100 btn-md btn-primary float-sm-left next-stake-btn" type="button">Display Stakes</button></th>
       </tr>
-      <tr>
-        <th scope="col" ></th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody class="nav-table">
 
-    </tbody>
+    </thead>
+    <div class="stakelist w-100"></div>
   </table>
 </div>
     </main>
@@ -249,7 +243,7 @@
             <tbody class="tbody-3">
 
             </tbody>
-          </table>
+          </tableve>
         </div>
     </main> 
     </main> 

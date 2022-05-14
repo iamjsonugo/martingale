@@ -37,17 +37,12 @@ const paginate = (items, page = 1, perPage = 10) => {
 
 ///////////////
 function myFunction() {
-  /* Get the text field */
   var copyText = document.getElementById("myInput");
 
-  /* Select the text field */
   copyText.select();
   copyText.setSelectionRange(0, 99999); /* For mobile devices */
 
-   /* Copy the text inside the text field */
   navigator.clipboard.writeText(copyText.value);
-
-  /* Alert the copied text */
   alert("Copied the text: " + copyText.value);
 }
 
@@ -138,36 +133,6 @@ Output:
  Location: "Sydney",
  Age: "25"
 }
-55,000
-50
-60
-75
-90
-110
-130
-160
-190
-230
-280
-340
-410
-500
-600
-720
-860
-1030
-1230
-1480
-1780
-2140
-2570
-3090
-3710
-4450
-5340
-6410
-7700
-9250
 
 1 win per season
 5 seasons per day
