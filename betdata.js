@@ -62,7 +62,7 @@ function betData() {
       season.push(week);
     }
   }
-  season.splice(0, 1);/* ideal data without unwanted data*/
+  season.splice(0, 1); /* ideal data without unwanted data*/
 
   let reports = {};
   //process winData
@@ -121,7 +121,9 @@ function betData() {
       let lossStreak = currentWeek - oldWeek;
       positionCount.push(pos);
       streakCount.push(lossStreak - 1);
-      if (Math.max(...streakCount) > 18) {maxStreaks.push(Math.max(...streakCount))};
+      if (Math.max(...streakCount) > 18) {
+        maxStreaks.push(Math.max(...streakCount));
+      }
       reports.positionData.push([
         match,
         pos,
@@ -129,8 +131,8 @@ function betData() {
         `<b>${lossStreak - 1}</b>`,
       ]);
     }
-    maxStreaksPosition =  [maxStreaks.length+1];
-    console.log(maxStreaksPosition)
+    maxStreaksPosition = [maxStreaks.length + 1];
+    console.log(maxStreaksPosition);
     if (print == true) {
       reports.saveData = reports.positionData;
     }
@@ -160,29 +162,28 @@ function betData() {
 `;
   }
 
-  const a = [4,"a","a","a","a","a","a","a","a",6,3,4,3]
+  const a = [4, "a", "a", "a", "a", "a", "a", "a", "a", 6, 3, 4, 3];
 
-  function count_duplicate(a){
-   let counts = {}
-  
-   for(let i =0; i < a.length; i++){ 
-       if (counts[a[i]]){
-       counts[a[i]] += 1
-       } else {
-       counts[a[i]] = 1
-       }
-      }  
-      let data = [];
-      for (let prop in counts){
-          if (counts[prop] >= 1){
+  function count_duplicate(a) {
+    let counts = {};
 
-              data.push("("+prop + "-" + counts[prop] + ")")
-          }
+    for (let i = 0; i < a.length; i++) {
+      if (counts[a[i]]) {
+        counts[a[i]] += 1;
+      } else {
+        counts[a[i]] = 1;
       }
-    return(data)
+    }
+    let data = [];
+    for (let prop in counts) {
+      if (counts[prop] >= 1) {
+        data.push("(" + prop + "-" + counts[prop] + ")");
+      }
+    }
+    return data;
   }
-  
-  console.log(count_duplicate(a))
+
+  console.log(count_duplicate(a));
 
   final = {
     positionCount: count_duplicate(positionCount),
@@ -214,19 +215,22 @@ function betData() {
           <td></td>
     </tr>
     <tr>
-    <td>Test Season No. </td>
-    <td>${seasonNo===maxStreaksPosition?"Not Safe":"Safe"}</td>
+    <td>Riskiest No. </td>
     <td>${maxStreaksPosition}</td>
+    <td></td>
     </tr>
 `;
+}
+
+function saveData() {
   const insertSeason = {
     timestamp: new Date(),
     data: final.rawData,
   };
-    db.season.add(insertSeason).then(function () {
-      //alert("Bet Data Saved!");
-    });
-  
+  db.season.add(insertSeason).then(function () {
+    console.log("Bet Data Saved!");
+  });
+
   totalMatches = 0;
   winCount = 0;
   positionCount = [];
@@ -235,18 +239,43 @@ function betData() {
   timeSaved = "";
 }
 
-document.querySelector(".bet-data-btn").addEventListener("click", (event) => {
+document.querySelector(".process-btn").addEventListener("click", (event) => {
+  betData();
+});
+document.querySelector(".prev-btn").addEventListener("click", (event) => {
+  betData();
+});
+document.querySelector(".recent-btn").addEventListener("click", (event) => {
+  betData();
+});
+document.querySelector(".save-btn").addEventListener("click", (event) => {
   betData();
 });
 
+const paginate = (items, page = 1, perPage = 1) => {
+  const offset = perPage * (page - 1);
+  const totalPages = Math.ceil(items.length / perPage);
+  const paginatedItems = items.slice(offset, perPage * page);
+
+  return {
+    previousPage: page - 1 ? page - 1 : null,
+    nextPage: totalPages > page ? page + 1 : null,
+    total: items.length,
+    totalPages: totalPages,
+    items: paginatedItems,
+  };
+};
+
 document.querySelector(".tbody-2").innerHTML = "";
-const oneWeekAgo = new Date(Date.now() - 60*60*1000*24*7);
-console.log(oneWeekAgo)
-db.season.where("id").below(50).toArray().then(function (results) {
-  let data = results;
-  console.log(results)
-  for (const row of data) {
-      //document.querySelector(".tbody-2").innerHTML += `<tr>
-    console.log(season);
-  }
-});   
+const oneWeekAgo = new Date(Date.now() - 60 * 60 * 1000 * 24 * 7);
+const today = new Date(Date.now());
+console.log(oneWeekAgo);
+db.season
+  .where("id")
+  .above(50)
+  .offset(100)
+  .limit(50)
+  .toArray()
+  .then(function (data) {
+    console.log(paginate(data, 50).items[0].data);
+  });

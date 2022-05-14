@@ -138,7 +138,7 @@ Output:
  Location: "Sydney",
  Age: "25"
 }
-
+55,000
 50
 60
 75
@@ -172,7 +172,8 @@ Output:
 1 win per season
 5 seasons per day
 6 days per week
-withdraw 1/3 of as profit
+withdraw 1/3 as profit
+restart
 
 
 
