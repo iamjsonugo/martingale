@@ -2,12 +2,14 @@ let positionCount = [];
 let streakCount = [];
 let rawData = document.querySelector(".bet-data-textarea").value;
 let timeSaved = "";
+let maxStreaks = 0;
 let totalMatches = 0;
 let final = {
   positionCount: positionCount,
   streakCount: streakCount,
   rawData: rawData,
   timeSaved: timeSaved,
+  maxStreaks: maxStreaks,
 };
 
 function betData() {
@@ -102,6 +104,7 @@ function betData() {
 
     let currentWeek = 0;
     let oldWeek = 0;
+    let maxStreaks = [];
     for (let i = 0; i < reports.winData.length; i++) {
       const match = reports.winData[i]; //
       let matchWeek = match.split(":")[0];
@@ -118,6 +121,7 @@ function betData() {
       let lossStreak = currentWeek - oldWeek;
       positionCount.push(pos);
       streakCount.push(lossStreak - 1);
+      if (Math.max(...streakCount) > 18) {maxStreaks.push(Math.max(...streakCount))};
       reports.positionData.push([
         match,
         pos,
@@ -125,6 +129,8 @@ function betData() {
         `<b>${lossStreak - 1}</b>`,
       ]);
     }
+    maxStreaksPosition =  [maxStreaks.length+1];
+    console.log(maxStreaksPosition)
     if (print == true) {
       reports.saveData = reports.positionData;
     }
@@ -147,7 +153,6 @@ function betData() {
     i += 1;
     document.querySelector(".betdata-table").innerHTML += `
     <tr>
-          <td>${i}</td>
           <td>No. ${row[1]}</td>
           <td>${row[0].replace(/: \d\d/, ":").replace(/: \d/, ":")}</td>
           <td>${row[3]}</td>
@@ -186,6 +191,7 @@ function betData() {
     timeProcessed: timestamp,
   };
   document.querySelector(".betdetails-table").innerHTML = "";
+  let seasonNo = Math.floor(Math.random() * 10) + 1;
   document.querySelector(".betdetails-table").innerHTML += `
     <tr>
           <td>No.</td>
@@ -203,9 +209,14 @@ function betData() {
           <td></td>
     </tr>
     <tr>
-          <td>Season No </td>
-          <td>${Math.floor(Math.random() * 10) + 1}</td>
+          <td>Season No. </td>
+          <td>${seasonNo}</td>
           <td></td>
+    </tr>
+    <tr>
+    <td>Test Season No. </td>
+    <td>${seasonNo===maxStreaksPosition?"Not Safe":"Safe"}</td>
+    <td>${maxStreaksPosition}</td>
     </tr>
 `;
   const insertSeason = {

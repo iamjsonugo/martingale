@@ -169,7 +169,7 @@ Output:
 7700
 9250
 
-2 wins per season
+1 win per season
 5 seasons per day
 6 days per week
 withdraw 1/3 of as profit
