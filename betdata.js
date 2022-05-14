@@ -1,24 +1,6 @@
-const oneWeekAgo = new Date(Date.now() - 60*60*1000*24*7);
-console.log(oneWeekAgo)
-db.season.orderBy("id").reverse().limit(50).toArray().then(function (data) {
-    const paginate = (items, page = 1, perPage = 1) => {
-    const offset = perPage * (page - 1);
-    const totalPages = Math.ceil(items.length / perPage);
-    const paginatedItems = items.slice(offset, perPage * page);
-  
-    return {
-        previousPage: page - 1 ? page - 1 : null,
-        nextPage: (totalPages > page) ? page + 1 : null,
-        total: items.length,
-        totalPages: totalPages,
-        items: paginatedItems
-    };
-};
-  console.log(paginate(data, 50).items[0].id);//recent data
-
 let positionCount = [];
 let streakCount = [];
-let rawData = paginate(data, 50).items[0].data
+let rawData = document.querySelector(".bet-data-textarea").value;
 let textAreaData = document.querySelector(".bet-data-textarea").value;
 let timeSaved = "";
 let maxStreaks = 0;
@@ -32,8 +14,7 @@ let final = {
 };
 
 function betData() {
-  let text = paginate(data,50).items[0].data;
-  //let text = document.querySelector(".bet-data-textarea").value;
+  let text = document.querySelector(".bet-data-textarea").value;
 
   let timestamp = new Date();
   timeSaved = timestamp;
@@ -206,17 +187,13 @@ function betData() {
   final = {
     positionCount: count_duplicate(positionCount),
     streakCount: count_duplicate(streakCount),
-    rawData: paginate(data,50).items[0].data,
+    rawData: rawData,
     timeProcessed: timestamp,
   };
   document.querySelector(".betdetails-table").innerHTML = "";
   let seasonNo = Math.floor(Math.random() * 10) + 1;
   document.querySelector(".betdetails-table").innerHTML += `
-    <tr>
-          <td>Season ID</td>
-          <td>${paginate(data,50).items[0].id}</td>
-          <td></td>
-    </tr>
+  
     <tr>
           <td>No.</td>
           <td>${final.positionCount}</td>
@@ -228,9 +205,8 @@ function betData() {
           <td>${final.streakCount.length}</td>
     </tr>
     <tr>
-          <td>Time Saved</td>
-          <td>${paginate(data,50).items[0].timestamp}</td>
-          <td></td>
+          <td>Time Processed</td>
+          <td>${final.timeProcessed}</td>
     </tr>
     <tr>
           <td>Season No. </td>
@@ -257,16 +233,6 @@ function betData() {
 document.querySelector(".process-data-btn").addEventListener("click", (event) => {
   betData();
 });
-document.querySelector(".save-data-btn").addEventListener("click", (event) => {
-
-  const insertSeason = {
-    timestamp: new Date(),
-    data: document.querySelector(".bet-data-textarea").value,
-  };
-    db.season.add(insertSeason).then(function () {
-      alert("Bet Data Saved!");
-      document.querySelector(".bet-data-textarea").value="";
-    });});
 
     function calculateNextStake(previousLoss=0, resetParam=false){
       let stakeList = "55000*50*60*75*90*110*130*160*190*230*280*340*410*500*600*720*860*1030*1230*1480*1780*2140*2570*3090*3710*4450*5340*6410*7700*9250";
@@ -274,17 +240,11 @@ document.querySelector(".save-data-btn").addEventListener("click", (event) => {
       bankRoll = stakeList[0]
       stakeList.shift()
 
-      function copyFunc(id) {      
-        ;
-        alert("Copied the text "+id);
-      }
-
       for (const stake of stakeList) {
         document.querySelector(".stakelist").innerHTML += `<b>
         <button class="btn btn-md each-stake  float-sm-right ${stake}" style="background-color:lightgrey;margin:4px" onclick="navigator.clipboard.writeText(${stake});this.style.background='orange';" type="button" style="width:80px">${stake}</button>
         </b>`
-        
-        
+         
         document.querySelector(".next-stake-btn").style.display="none";
         document.querySelector(".reset-btn").style.display="block";
       }
@@ -300,4 +260,3 @@ document.querySelector(".reset-btn").addEventListener("click", (event) => {
   }
 });
 
-});   
