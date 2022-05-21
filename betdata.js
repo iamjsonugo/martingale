@@ -235,7 +235,8 @@ document.querySelector(".process-data-btn").addEventListener("click", (event) =>
 });
 
     function calculateNextStake(previousLoss=0, resetParam=false){
-      let stakeList = "55000*50*60*75*90*110*130*160*190*230*280*340*410*500*600*720*860*1030*1230*1480*1780*2140*2570*3090*3710*4450*5340*6410*7700*9250";
+      let stakeList = "240000*50*60*75*90*110*130*160*190*230*280*340*410*490*590*710*850*1020*1220*1470*1770*2120*2550*3060*3670*4400*5280*6340*7610*9150*10980*13180*15820*18980*22780*27340*32808*39370*47240"
+;
       stakeList = stakeList.split("*")  
       bankRoll = stakeList[0]
       stakeList.shift()
