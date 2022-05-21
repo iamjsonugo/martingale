@@ -241,8 +241,8 @@ document.querySelector(".process-data-btn").addEventListener("click", (event) =>
       bankRoll = stakeList[0]
       stakeList.shift()
 
-      for (const stake of stakeList) {
-        document.querySelector(".stakelist").innerHTML += `<b>
+      for (const [i, stake] of stakeList.entries()) {
+        document.querySelector(".stakelist").innerHTML += `(${i}) <b>
         <button class="btn btn-md each-stake  float-sm-right ${stake}" style="background-color:lightgrey;margin:4px" onclick="navigator.clipboard.writeText(${stake});this.style.background='orange';" type="button" style="width:80px">${stake}</button>
         </b>`
          
