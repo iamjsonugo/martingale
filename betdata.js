@@ -33,10 +33,8 @@ function betData() {
     .replace(/\t/gi, "#")
     .replace(/\n/gi, "&")
     .replace(/\s/gi, "");
-
-  text = text.split("@");
-
-  let season = [];
+    
+    let season = [];
     let textTwo = text;
     textTwo = textTwo.substring(1);
     let allWeeks = text.split("@");
@@ -50,16 +48,19 @@ function betData() {
     console.log("SEASON TWO", season)
     
 
-let reports = {};
+
+  let reports = {};
   //process winData
   reports.winData = [];
   reports.positionData = [];
   reports.saveData = []; //db
 
   function processPosition(param, print) {
+      
     for (let i = 0; i < season.length; i++) {
       for (let j = 0; j < season[i].length; j++) {
         const match = season[i][param - 1];
+       
         let score = match.replace(/#/gi, "");
         let reportScore = score;
         score = score.split("-");
@@ -116,7 +117,7 @@ let reports = {};
       ]);
     }
     maxStreaksPosition =  [maxStreaks.length+1];
-    console.log(maxStreaksPosition)
+   // console.log(maxStreaksPosition)
     if (print == true) {
       reports.saveData = reports.positionData;
     }
