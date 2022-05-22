@@ -37,36 +37,20 @@ function betData() {
   text = text.split("@");
 
   let season = [];
-  for (let i = 0; i < text.length; i++) {
-    text[i] = text[i].split("\n");
-    for (let j = 0; j < text[i].length; j++) {
-      let week = [];
-      let match = text[i][j].split("&");
-
-      week.push(match[1]);
-      week.push(match[2]);
-      week.push(match[3]);
-      week.push(match[4]);
-      week.push(match[5]);
-      week.push(match[6]);
-      week.push(match[7]);
-      week.push(match[8]);
-      week.push(match[9]);
-      week.push(match[10]);
-      week.push(match[11]);
-
-      if (match[1] == "") {
-        week.splice(0, 1);
-      } else if (match[11] == "") {
-        week.splice(10, 1);
-      } else {
-      }
-      season.push(week);
+    let textTwo = text;
+    textTwo = textTwo.substring(1);
+    let allWeeks = text.split("@");
+    for (let i = 0; i < allWeeks.length; i++) {
+        allWeeks[i] = allWeeks[i].slice(0,-1);
+        allWeeks[i] = allWeeks[i].substring(1);
+        //console.log(allWeeks[i]);
+        season.push(allWeeks[i].split("&"))
     }
-  }
-  season.splice(0, 1);/* ideal data without unwanted data*/
+    season.shift();
+    console.log("SEASON TWO", season)
+    
 
-  let reports = {};
+let reports = {};
   //process winData
   reports.winData = [];
   reports.positionData = [];
