@@ -18,6 +18,7 @@ function betData() {
 
   let timestamp = new Date();
   timeSaved = timestamp;
+  text = text.replace(/bet now/gi, "");
   text = text.replace(/able\n/i, "@");
   text = text.split("@")[1];
   text = text
