@@ -260,3 +260,7 @@ document.querySelector(".reset-btn").addEventListener("click", (event) => {
   }
 });
 
+async function paste(input) {
+        const text = await navigator.clipboard.readText();
+        input.value = text;
+      }
