@@ -39,10 +39,19 @@ function betData() {
     textTwo = textTwo.substring(1);
     let allWeeks = text.split("@");
     for (let i = 0; i < allWeeks.length; i++) {
+       
         allWeeks[i] = allWeeks[i].slice(0,-1);
         allWeeks[i] = allWeeks[i].substring(1);
         //console.log(allWeeks[i]);
-        season.push(allWeeks[i].split("&"))
+        seasonData = allWeeks[i].split("&");
+        if (seasonData[0] ==""){
+            seasonData.shift();
+        } else if (seasonData[10] ==""){
+            seasonData.pop()
+        } else {
+            seasonData;
+        }
+        season.push(seasonData != "" ? seasonData : true)
     }
     season.shift();
     console.log("SEASON TWO", season)
@@ -54,14 +63,26 @@ function betData() {
   reports.winData = [];
   reports.positionData = [];
   reports.saveData = []; //db
-
+  
+  
+ 
+ /////////////////
   function processPosition(param, print) {
-      
+    function processPos(){
+      for (let week of season){
+          for (let match of week){
+          //console.log(match)
+          }
+      }
+     }
+    processPos();
+ 
+ 
     for (let i = 0; i < season.length; i++) {
       for (let j = 0; j < season[i].length; j++) {
         const match = season[i][param - 1];
        
-        let score = match.replace(/#/gi, "");
+       let score = match.replace(/#/gi, "");
         let reportScore = score;
         score = score.split("-");
         let teamA = score[0].replace(/\D/gi, "");
@@ -76,16 +97,8 @@ function betData() {
         if (`${teamA}-${teamB}` === "1-1") {
           reports.winData.push(`WK${week}: ${position} ${reportScore}`);
         }
-        /*
-        //UN 1.5
-        if (teamA+teamB < 1.5) {
-          reports.winData.push(`WK${week}: ${position} ${reportScore}`);
-        }        
-        //Draw
-        totalMatches += 1;
-        if (teamA-teamB === 0) {
-          reports.winData.push(`WK${week}: ${position} ${reportScore}`);
-        }*/
+        
+   
       }
     }
 
