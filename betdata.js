@@ -15,6 +15,28 @@ let final = {
 
 function betData() {
   let text = document.querySelector(".bet-data-textarea").value;
+  let key = "rawdata";
+window.localStorage.setItem(key, JSON.stringify({
+  data: text,
+  timestamp: Date.now()
+}));
+
+// Extract all timestamps
+let entries = [];
+for (let i = 0; i < window.localStorage.length; i++) {
+  let key = window.localStorage.key(i);
+  let entryStr = window.localStorage.getItem(key);
+  let entry = JSON.parse(entryStr);
+  entries.push({ key: key, timestamp: entry.timestamp });
+}
+// Sort newest first (we want to keep the first newest)  entries.sort((entry1, entry2) => {
+  return entry1.timestamp < entry2.timestamp;
+});
+// Remove oldest entries
+for (var i = 50; i < entries.length; i++) {
+    window.localStorage.removeItem(entries[i].key);
+}
+
 
   let timestamp = new Date();
   timeSaved = timestamp;
