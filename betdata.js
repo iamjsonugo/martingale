@@ -285,7 +285,8 @@ for (var i = 0; i < window.localStorage.length; i++) {
   var entry = JSON.parse(entryStr);
   entries.push({ key: key, timestamp: entry.timestamp });
 }
-// Sort newest first (we want to keep the first newest)  entries.sort((entry1, entry2) => {
+// Sort newest first (we want to keep the first newest) 
+ entries.sort((entry1, entry2) => {
   return entry1.timestamp < entry2.timestamp;
 });
 // Remove oldest entries
