@@ -274,5 +274,5 @@ async function paste(input) {
 document.querySelector(".modal-body").innerHTML = "";
 const keys = Object.keys(localStorage);
 for (let key of keys) {
-   document.querySelector(".modal-body").innerHTML += `${key}:<br> <textarea class="" >${JSON.parse(localStorage.getItem(key)).data}</textarea> <hr>`;
+   document.querySelector(".modal-body").innerHTML += `${key}:<br> <textarea class="form-control" >${JSON.parse(localStorage.getItem(key)).data}</textarea> <hr>`;
 }
