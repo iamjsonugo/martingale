@@ -290,6 +290,6 @@ for (var i = 0; i < window.localStorage.length; i++) {
   return entry1.timestamp < entry2.timestamp;
 });
 // Remove oldest entries
-for (var i = 50; i < entries.length; i++) {
+for (var i = 5; i < entries.length; i++) {
     window.localStorage.removeItem(entries[i].key);
 }
