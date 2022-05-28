@@ -15,7 +15,13 @@ let final = {
 
 function betData() {
   let text = document.querySelector(".bet-data-textarea").value;
-  
+
+ let key = "betdata";
+ localStorage.setItem(key, JSON.stringify({
+  data: text,
+  timestamp: Date.now()
+ }));
+
   let timestamp = new Date();
   timeSaved = timestamp;
   text = text.replace(/bet now/gi, "");
