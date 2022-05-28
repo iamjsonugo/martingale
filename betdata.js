@@ -17,7 +17,7 @@ function betData() {
   let text = document.querySelector(".bet-data-textarea").value;
   let timestamp = new Date();
 
- let key = timestamp.toString().slice(0,15);
+ let key = timestamp.toString().slice(0,25);
  localStorage.setItem(key, JSON.stringify({
   data: text,
   timestamp: Date.now()
@@ -274,5 +274,6 @@ async function paste(input) {
 document.querySelector(".modal-body").innerHTML = "";
 const keys = Object.keys(localStorage);
 for (let key of keys) {
-   document.querySelector(".modal-body").innerHTML += `${key}: ${localStorage.getItem(key)}<hr>`;
+   document.querySelector(".modal-body").innerHTML += `${key}: <button class="btn btn-md" style="background-color:lightgrey;margin:4px" onclick="navigator.clipboard.writeText(${localStorage.getItem(key)});this.style.background='orange';">Copy</button>
+       <hr>`;
 }
