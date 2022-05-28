@@ -237,6 +237,11 @@ function betData() {
 
 document.querySelector(".process-data-btn").addEventListener("click", (event) => {
   betData();
+document.querySelector(".modal-body").innerHTML = "";
+const keys = Object.keys(localStorage);
+for (let key of keys) {
+   document.querySelector(".modal-body").innerHTML += `${key}: ${localStorage.getItem(key)}`;
+}
 });
 
     function calculateNextStake(previousLoss=0, resetParam=false){
