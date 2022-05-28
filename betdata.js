@@ -17,7 +17,7 @@ function betData() {
   let text = document.querySelector(".bet-data-textarea").value;
   let timestamp = new Date();
 
- let key = timestamp.toString().slice(0,12);
+ let key = timestamp.toString().slice(0,15);
  localStorage.setItem(key, JSON.stringify({
   data: text,
   timestamp: Date.now()
