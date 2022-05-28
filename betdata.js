@@ -274,5 +274,5 @@ async function paste(input) {
 document.querySelector(".modal-body").innerHTML = "";
 const keys = Object.keys(localStorage);
 for (let key of keys) {
-   document.querySelector(".modal-body").innerHTML += `${key}: <button class="btn btn-sm" style="background-color:lightgrey;" onclick="navigator.clipboard.writeText(${localStorage.getItem(key)});this.style.background='orange';">Copy</button><br> ${JSON.parse(localStorage.getItem(key)).data} <hr>`;
+   document.querySelector(".modal-body").innerHTML += `${key}: <button class="btn btn-sm" style="background-color:lightgrey;" onclick="navigator.clipboard.writeText(${JSON.parse(localStorage.getItem(key)).data});this.style.background='orange';">Copy</button><br> ${JSON.parse(localStorage.getItem(key)).data} <hr>`;
 }
