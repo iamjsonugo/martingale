@@ -104,7 +104,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
 
         //Correct Score 1-1
         totalMatches += 1;
-        if (${teamA}-${teamB} === 0) {
+        if (teamA-teamB === 0) {
            reports.winData.push(`WK${week}: ${position} ${reportScore}`);
            teamCount.push(teamAName);
            teamCount.push(teamBName);
