@@ -219,16 +219,6 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
           <td>${final.timeProcessed}</td>
           <td></td>
     </tr>
-    <tr>
-          <td>Season No. </td>
-          <td>${seasonNo}</td>
-          <td></td>
-    </tr>
-    <tr>
-    <td>Riskiest No. </td>
-    <td>${maxStreaksPosition}</td>
-    <td></td>
-    </tr>
 `;
  
   
