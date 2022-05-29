@@ -1,3 +1,8 @@
+const db = new Dexie("BetDb");
+db.version(1).stores({
+  season: "++id,date,data"
+});
+
 let positionCount = [];
 let streakCount = [];
 let rawData = document.querySelector(".bet-data-textarea").value;
@@ -13,15 +18,11 @@ let final = {
   maxStreaks: maxStreaks,
 };
 
-function betData() {
-  let text = document.querySelector(".bet-data-textarea").value;
+function betData(text = document.querySelector(".bet-data-textarea").value, time="Now", date="Today", id="N/A") {
   let timestamp = new Date();
 
- let key = timestamp.toString().slice(0,25);
- localStorage.setItem(key, JSON.stringify({
-  data: text,
-  timestamp: Date.now()
- }));
+ let stamp = timestamp.toString().slice(0,25);
+
 
   timeSaved = timestamp;
   text = text.replace(/bet now/gi, "");
@@ -198,7 +199,11 @@ function betData() {
   document.querySelector(".betdetails-table").innerHTML = "";
   let seasonNo = Math.floor(Math.random() * 10) + 1;
   document.querySelector(".betdetails-table").innerHTML += `
-  
+  <tr>
+        <td><b>${id}</b></td>
+        <td><b>${time}</b></td>
+        <td><b>${date}</b></td>
+  </tr>
     <tr>
           <td>No.</td>
           <td>${final.positionCount}</td>
@@ -212,6 +217,7 @@ function betData() {
     <tr>
           <td>Time Processed</td>
           <td>${final.timeProcessed}</td>
+          <td></td>
     </tr>
     <tr>
           <td>Season No. </td>
@@ -236,7 +242,7 @@ function betData() {
 
 
 document.querySelector(".process-data-btn").addEventListener("click", (event) => {
-  betData();
+ betData();
 });
 
     function calculateNextStake(previousLoss=0, resetParam=false){
@@ -271,25 +277,58 @@ async function paste(input) {
         input.value = text;
       }
 
-document.querySelector(".modal-body").innerHTML = "";
-const keys = Object.keys(localStorage);
-for (let key of keys) {
-   document.querySelector(".modal-body").innerHTML += `${key}:<br> <textarea class="form-control" >${JSON.parse(localStorage.getItem(key)).data}</textarea> <hr>`;
+function saveData(){
+    let timestamp = new Date();
+      const insertDailyData = {
+        date: timestamp.toLocaleString(undefined, {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+        }),
+        time: timestamp.toLocaleString(undefined, {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        data: document.querySelector(".bet-data-textarea").value,
+      };
+
+        db.season
+          .add(insertDailyData)
+          .then(function () {
+            console.log("Db Data", db.season.orderBy("id").reverse().toArray());
+          });
+}
+document.querySelector(".save-data-btn").addEventListener("click", (event) => {
+saveData();
+  alert("Data saved!")
+  refreshDetails()
+});
+
+function refreshDetails(currentPage=0){
+    db.season.orderBy("id").reverse().limit(16).toArray().then(function (results) {
+      let data = results;
+     
+    betData(data[currentPage].data, data[currentPage].time, data[currentPage].date, data[currentPage].id)
+      for (const row of data) {
+        console.log(row.data)
+      }
+  });   
 }
 
-// Extract all timestamps
-var entries = [];
-for (var i = 0; i < window.localStorage.length; i++) {
-  var key = window.localStorage.key(i);
-  var entryStr = window.localStorage.getItem(key);
-  var entry = JSON.parse(entryStr);
-  entries.push({ key: key, timestamp: entry.timestamp });
-}
-// Sort newest first (we want to keep the first newest) 
- entries.sort((entry1, entry2) => {
-  return entry1.timestamp < entry2.timestamp;
+page = 15;
+document.querySelector(".prev-data-btn").addEventListener("click", (event) => {
+  if (page == 15){
+      page = 15
+  } else{
+  page = page+1;
+  }
+  refreshDetails(page)
 });
-// Remove oldest entries
-for (var i = 50; i < entries.length; i++) {
-    window.localStorage.removeItem(entries[i].key);
-}
+document.querySelector(".next-data-btn").addEventListener("click", (event) => {
+  if (page == 0){
+      page = 0
+  } else{
+  page = page -1;
+  }
+  refreshDetails(page)
+});
