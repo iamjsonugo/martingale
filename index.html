@@ -2,402 +2,110 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-  <meta name="generator" content="Hugo 0.84.0">
-  <title>Dashboard Template · Bootstrap v5.0</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Martingale</title>
 
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
-
-
-
-  <!-- Bootstrap core CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-
-  <style>
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
-
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-    }
-  </style>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
 
-  <!-- Custom styles for this template -->
-  <link href="dashboard.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+@media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
 </head>
 
 <body>
 
-  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Ugo</a>
-      <button type="button" class="page-button-4 btn btn-sm mx-3 btn-primary">
-      Menu
-    </button>
-  </header>
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Ugo</a>
 
-  <div class="container-fluid">
-    <div class="row">
-      <hr>
-      <div class="page-1">
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <div
-            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Trading Journal</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="btn-group me-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary save-btn">Save</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary refresh-btn">Refresh</button>
-              </div>
+    </header>
+
+    <div class="page-5">
+        <main class="container">
+            <br> <h3>Paste Raw Data</h3>
+
+            <textarea rows="8" onclick="paste(this)" class="form-control bet-data-textarea" aria-label="With textarea"></textarea>
+ <br>
+            <!-- Button trigger modal -->
+            <button type="button" class=" btn btn-primary process-data-btn">
+                Process
+            </button> 
+            <button type="button" class="w-7 btn btn-primary save-data-btn">
+                Save
+            </button>
+            <hr>
+            <h3>Season Details</h3>
+            <div class="table-responsive">
+                <table style="text-align:left;" class="nav-header table table-bordered table-large">
+                    <thead>
+                        <tr>
+                            <th scope="ol"><button class="btn w-100 btn-md btn-primary float-sm-right prev-data-btn" type="button">Prev</button></th>
+                            <th scope="ol"><button class="btn w-100 btn-md btn-primary float-sm-right recent-data-btn" type="button">Recent</button></th>
+                            <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right next-data-btn" type="button">Next</button></th>
+                        </tr>
+                    </thead>
+                    <tbody class="nav-table">
+                    </tbody>
+                </table>
             </div>
-          </div>
-          <button type="button" class="btn btn-sm btn-success one-win-btn">One Win</button>
-          <h1 id="next-stake">- -</h1>
-          <h5 id="amount-lost">- -</h5>
-          <hr>
-          <main class="container">
-            <div class="bg-light p-1 rounded mt-3">
-              <main class="form-signin center">
-                <form>
-                  <div class="form-floating">
-                    <input type="number" class="profit form-control" value="0.8" id="floatingInput">
-                    <label for="floatingInput">Profit</label>
-                  </div>
-                  <div class="form-floating">
-                    <input type="number" class="balance form-control" value="66" id="floatingInput">
-                    <label for="floatingInput">Balance</label>
-                  </div>
-                  <div class="form-floating">
-                    <input type="number" class="odd form-control" value="1.8" id="floatingInput">
-                    <label for="floatingInput">Odd</label>
-                  </div>
-                  <br>
-                  <div class="mb-3">
-                    <select class="strategy form-select" aria-label="Default select example">
-                      <option value="A" selected>Strategy A</option>
-                      <option value="B">Strategy B</option>
-                      <option value="C">Strategy C</option>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <select class="trade-pair form-select" aria-label="Default select example">
-                      <option value="Pair 1" selected>Trade Pair 1 </option>
-                      <option value="Pair 2">Trade Pair 2</option>
-                      <option value="Pair 3">Trade Pair 3</option>
-                    </select>
-                  </div>
-                </form>
-              </main>
+            <div class="table-responsive">
+                <table style="text-align:left;" class="betdetails-header table table-bordered table-large">
 
+                    <tbody class="betdetails-table">
+
+                    </tbody>
+                </table>
             </div>
-          </main>
-          <hr>
-               
-          <h3>Table History 
-          </h3>
-          <div class="table-responsive">
-            <table style="text-align:right;" class="table table-bordered table-large">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Opening Balance</th>
-                  <th scope="col">Stake</th>
-                  <th scope="col">Outcome</th>
-                  <th scope="col">PnL</th>
-                  <th scope="col">Closing Balance</th>
-                </tr>
-              </thead>
-              <tbody class="tbody-1">
+            <div class="table-responsive">
+                <table style="text-align:left;" class="betdata-header table table-bordered table-large">
 
-              </tbody>
-            </table>
-          </div>
+                    <tbody class="betdata-table">
+
+                    </tbody>
+                </table>
+            </div>
+            <h3>Stake List</h3>
+            <div class="table-responsive">
+                <table style="text-align:left;" class="stake-header table table-bordered table-large">
+                    <thead>
+                        <tr>
+                            <th scope="col"><button style="display: none;" class="btn w-100 btn-md btn-primary float-sm-right reset-btn" type="button">Reset</button></th>
+                            <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-left next-stake-btn" type="button">Display Stakes</button></th>
+                        </tr>
+
+                    </thead>
+                    <div class="stakelist w-100"></div>
+                </table>
+            </div>
         </main>
-      </div>
     </div>
-  </div>
-  <div class="page-5">
-    <main class="container">
-      <h3>Paste Raw Data</h3>
 
-<textarea rows="8" onclick="paste(this)" class="form-control bet-data-textarea" aria-label="With textarea"></textarea>
-
-<!-- Button trigger modal -->
-<button type="button" class="btn w-100 btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-  Copy old data
-</button>
-<hr>
-<h3>Season Details</h3>
-<div class="table-responsive">
-  <table style="text-align:left;" class="nav-header table table-bordered table-large">
-    <thead>
-      <tr>
-        <th scope="col" ></th>
-        <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right save-data-btn" type="button">Save</button></th>
-        <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right process-data-btn" type="button">Process</button></th>
-      </tr>
-    </thead>
-    <tbody class="nav-table">
-    </tbody>
-  </table>
-</div>
-        <div class="table-responsive">
-          <table style="text-align:left;" class="betdetails-header table table-bordered table-large">
-            
-            <tbody class="betdetails-table">
-
-            </tbody>
-          </table>
-        </div>
-        <div class="table-responsive">
-          <table style="text-align:left;" class="betdata-header table table-bordered table-large">
-
-            <tbody class="betdata-table">
-
-            </tbody>
-          </table>
-        </div>
-      <h3>Stake List</h3>
-<div class="table-responsive">
-  <table style="text-align:left;" class="stake-header table table-bordered table-large">
-    <thead>
-      <tr>
-        <th scope="col"><button style="display: none;" class="btn w-100 btn-md btn-primary float-sm-right reset-btn" type="button">Reset</button></th>
-        <th scope="col" ><button class="btn w-100 btn-md btn-primary float-sm-left next-stake-btn" type="button">Display Stakes</button></th>
-      </tr>
-
-    </thead>
-    <div class="stakelist w-100"></div>
-  </table>
- 
-
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        ... <br>
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div>
-    </main>
-  </div>  
-  <div class="page-6">
-    <main class="container">
-      <div class="bg-light p-5 rounded mt-3">
-        Page 6
-      </div>
-    </main>
-  </div>  
-  <div class="page-7">
-    <main class="container">
-    </main>
-  </div>  
-  <div class="page-2">
-    <main class="container">
-        <h3>Daily Report 
-        </h3>    
-        <div class="form-floating">
-          <input type="date" class="date-search odd form-control" onchange="refreshDaily();refreshMonthly();" id="floatingInput" value="">
-          <label for="floatingInput">Date</label>
-        </div>     
-        
-        <hr>
-        <div class="table-responsive">
-          <table style="text-align:right;" class="daily-table table table-bordered table-large">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col" style="width: fit-content;">Date</th>
-                <th scope="col">Strategy</th>
-                <th scope="col">Max Stake</th>
-                <th scope="col">Max Loss Streak</th>
-                <th scope="col">Max Step</th>
-                <th scope="col">Max Account Loss</th>
-                <th scope="col">Working Balance</th>
-              </tr>
-            </thead>
-            <tbody class="tbody-2">
-
-            </tbody>
-          </table>
-        </div>
-    </main> 
-  </div>
-  <div class="page-3">
-    <main class="container">
-      <hr>
-        <h3>Monthly Report 
-        </h3>
-        <div class="table-responsive">
-          <table style="text-align:right;" class="table table-bordered table-large">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col" style="width: fit-content;">Date</th>
-                <th scope="col">Strategy</th>
-                <th scope="col">Max Stake</th>
-                <th scope="col">Max Loss Streak</th>
-                <th scope="col">Max Step</th>
-                <th scope="col">Max Account Loss</th>
-                <th scope="col">Working Balance</th>
-              </tr>
-            </thead>
-            <tbody class="tbody-3">
-
-            </tbody>
-          </tableve>
-        </div>
-    </main> 
-    </main> 
-  </div>
-  <div class="page-4">
-    <main class="container">
-      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-        <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm page-button-1">
-            <div class="card-body py-3">
-              <h3 class="my-0 fw-normal">Calculate Stake</h3>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm page-button-2">
-            <div class="card-body py-3">
-              <h3 class="my-0 fw-normal">Daily Reports</h3>
-            </div>
-          </div> 
-        </div>
-        <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm page-button-3">
-            <div class="card-body py-3">
-              <h3 class="my-0 fw-normal">Monthly Report</h3>
-            </div>
-          </div>
-        </div>
-        <HR>
-        <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm page-button-5">
-            <div class="card-body py-3">
-              <h3 class="my-0 fw-normal">Save betting data</h3>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm page-button-6">
-            <div class="card-body py-3">
-              <h3 class="my-0 fw-normal"> 6 ODDS (CS1-1)</h3>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card mb-4 rounded-3 shadow-sm page-button-7">
-            <div class="card-body py-3">
-              <h3 class="my-0 fw-normal"> 3 ODDS(UN1.5)</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-white">
-    <div class="container-fluid">
-      <button class="w-50 btn btn-lg btn-success win-btn" type="button">Won</button>
-      <button class="w-50 btn btn-lg btn-danger lose-btn" type="button">Lost</button>
-    </div>
-  </nav>
-  <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script src="dexie.min.js"></script>
-    <script src="dashboard.js"></script>
-    <script src="martingale.js"></script>
     <script src="betdata.js"></script>
 </body>
 
