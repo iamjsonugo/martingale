@@ -100,13 +100,14 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
         let teamBName = score[1].replace(/\d/gi, "");
         let position = param;
         let week = i + 1;
-        teamCount.push(teamAName);
-        teamCount.push(teamBName);
+        
 
         //Correct Score 1-1
         totalMatches += 1;
         if (`${teamA}-${teamB}` === "1-1") {
-          reports.winData.push(`WK${week}: ${position} ${reportScore}`);
+           reports.winData.push(`WK${week}: ${position} ${reportScore}`);
+           teamCount.push(teamAName);
+           teamCount.push(teamBName);
         }
         
    
