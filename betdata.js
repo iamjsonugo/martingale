@@ -329,3 +329,5 @@ document.querySelector(".next-data-btn").addEventListener("click", (event) => {
   }
   refreshDetails(page)
 });
+
+refreshDetails();
