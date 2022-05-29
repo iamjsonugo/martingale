@@ -5,6 +5,7 @@ db.version(1).stores({
 
 let positionCount = [];
 let streakCount = [];
+let teamCount = [];
 let rawData = document.querySelector(".bet-data-textarea").value;
 let textAreaData = document.querySelector(".bet-data-textarea").value;
 let timeSaved = "";
@@ -13,6 +14,7 @@ let totalMatches = 0;
 let final = {
   positionCount: positionCount,
   streakCount: streakCount,
+  teamCount:teamCount,
   rawData: rawData,
   timeSaved: timeSaved,
   maxStreaks: maxStreaks,
@@ -98,6 +100,8 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
         let teamBName = score[1].replace(/\d/gi, "");
         let position = param;
         let week = i + 1;
+        teamCount.push(teamAName);
+        teamCount.push(teamBName);
 
         //Correct Score 1-1
         totalMatches += 1;
@@ -193,6 +197,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
   final = {
     positionCount: count_duplicate(positionCount),
     streakCount: count_duplicate(streakCount),
+    teamCount: count_duplicate(teamCount),
     rawData: rawData,
     timeProcessed: timestamp,
   };
@@ -205,7 +210,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
         <td><b>${date}</b></td>
   </tr>
     <tr>
-          <td>No.</td>
+          <td>Position</td>
           <td>${final.positionCount}</td>
           <td>${final.positionCount.length}</td>
     </tr>
@@ -215,9 +220,9 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
           <td>${final.streakCount.length}</td>
     </tr>
     <tr>
-          <td>Time Processed</td>
-          <td>${final.timeProcessed}</td>
-          <td></td>
+          <td>Team</td>
+          <td>${final.teamCount}</td>
+          <td>${final.teamCount.length}</td>
     </tr>
 `;
  
