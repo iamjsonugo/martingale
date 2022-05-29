@@ -232,6 +232,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
   winCount = 0;
   positionCount = [];
   streakCount = [];
+  teamCount = [];
   rawData = "";
   timeSaved = "";
 }
