@@ -174,7 +174,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
 
   const a = [4,"a","a","a","a","a","a","a","a",6,3,4,3]
 
-  function count_duplicate(a){
+  function count_duplicate(a, team=false){
    let counts = {}
   
    for(let i =0; i < a.length; i++){ 
@@ -187,8 +187,11 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
       let data = [];
       for (let prop in counts){
           if (counts[prop] >= 1){
-
+              if (team){
+              data.push("("+prop + "-" + (counts[prop]/10) + ")")
+              } else {
               data.push("("+prop + "-" + counts[prop] + ")")
+              }
           }
       }
     return(data)
@@ -198,7 +201,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
   final = {
     positionCount: count_duplicate(positionCount),
     streakCount: count_duplicate(streakCount),
-    teamCount: count_duplicate(teamCount),
+    teamCount: count_duplicate(teamCount, true),
     rawData: rawData,
     timeProcessed: timestamp,
   };
