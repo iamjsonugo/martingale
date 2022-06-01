@@ -207,10 +207,12 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
   };
   document.querySelector(".betdetails-table").innerHTML = "";
   let seasonNo = Math.floor(Math.random() * 10) + 1;
+  date = date.split("/");
+  myDate = new Date("20"+date[2], date[0]-1, date[1])
   document.querySelector(".betdetails-table").innerHTML += `
   <tr>
         <td><b>ID ${id}</b></td>
-        <td><b>${date}, ${time} </b></td>
+        <td><b>${myDate.toDateString()}, ${time} </b></td>
         <td><b></b></td>
   </tr>
     <tr>
