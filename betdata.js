@@ -331,19 +331,15 @@ document.querySelector(".next-data-btn").addEventListener("click", (event) => {
   page = page -1;
   }
   refreshDetails(page)
-  fetchText();
 });
 
 refreshDetails();
 
 async function fetchText() {
-    let response = await fetch('ugomartingale.herokuapp.com');
-
-    console.log(response.status); // 200
-    console.log(response.statusText); // OK
-
-    if (response.status === 200) {
-        let data = await response.text();
+    let response = await fetch('https://www.ugomartingale.herokuapp.com');
+        let data = await response.json;
         alert(data);
-    }
+    
 }
+
+fetchText();
