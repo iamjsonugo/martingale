@@ -334,3 +334,17 @@ document.querySelector(".next-data-btn").addEventListener("click", (event) => {
 });
 
 refreshDetails();
+
+async function fetchText() {
+    let response = await fetch('ugomartingale.herokuapp.com');
+
+    console.log(response.status); // 200
+    console.log(response.statusText); // OK
+
+    if (response.status === 200) {
+        let data = await response.text();
+        alert(data);
+    }
+}
+
+fetchText();
