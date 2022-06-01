@@ -311,9 +311,7 @@ function refreshDetails(currentPage=0){
       let data = results;
      
     betData(data[currentPage].data, data[currentPage].time, data[currentPage].date, data[currentPage].id)
-      for (const row of data) {
-        console.log(row.data)
-      }
+      
   });   
 }
 
