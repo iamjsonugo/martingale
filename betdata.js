@@ -190,7 +190,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
               if (team){
               data.push("("+prop + "-" + (counts[prop]/10) + ")")
               } else {
-              data.push("("+prop + "-" + counts[prop] + ")")
+              data.push("(<b>"+prop + "</b>-" + counts[prop] + ")")
               }
           }
       }
@@ -207,11 +207,13 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
   };
   document.querySelector(".betdetails-table").innerHTML = "";
   let seasonNo = Math.floor(Math.random() * 10) + 1;
+  date = date.split("-");
+  myDate = new Date(date[1], date[0]-1, date[2]+"22")
   document.querySelector(".betdetails-table").innerHTML += `
   <tr>
-        <td><b>${id}</b></td>
+        <td><b>ID ${id}</b></td>
+        <td><b>${myDate.toDateString()}</b></td>
         <td><b>${time}</b></td>
-        <td><b>${date}</b></td>
   </tr>
     <tr>
           <td>Position</td>
