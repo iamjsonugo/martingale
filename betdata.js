@@ -331,6 +331,7 @@ document.querySelector(".next-data-btn").addEventListener("click", (event) => {
   page = page -1;
   }
   refreshDetails(page)
+  fetchText();
 });
 
 refreshDetails();
@@ -346,5 +347,3 @@ async function fetchText() {
         alert(data);
     }
 }
-
-fetchText();
