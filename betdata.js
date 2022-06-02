@@ -318,7 +318,7 @@ function refreshDetails(currentPage=0){
 page = 15;
 document.querySelector(".prev-data-btn").addEventListener("click", (event) => {
   if (page == 15){
-      page = 15
+      page = 0
   } else{
   page = page+1;
   }
@@ -326,7 +326,7 @@ document.querySelector(".prev-data-btn").addEventListener("click", (event) => {
 });
 document.querySelector(".next-data-btn").addEventListener("click", (event) => {
   if (page == 0){
-      page = 0
+      page = 15
   } else{
   page = page -1;
   }
