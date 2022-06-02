@@ -256,7 +256,7 @@ document.querySelector(".process-data-btn").addEventListener("click", (event) =>
 
       for (const [i, stake] of stakeList.entries()) {
         document.querySelector(".stakelist").innerHTML += `<b>
-        <button class="btn btn-md each-stake  float-sm-right ${stake}" style="background-color:lightgrey;margin:4px" onclick="navigator.clipboard.writeText(${stake});this.style.background='orange';" type="button" style="width:80px"> <sup>[${i+1}]</sup> ${stake}</button>
+        <button class="btn btn-md each-stake  float-sm-right ${stake}" style="width:100px!important;background-color:lightgrey;margin:4px" onclick="navigator.clipboard.writeText(${stake});this.style.background='orange';" type="button" style="width:80px"> <sup>[${i+1}]</sup> ${stake}</button>
         </b>`
          
         document.querySelector(".next-stake-btn").style.display="none";
@@ -336,7 +336,7 @@ document.querySelector(".next-data-btn").addEventListener("click", (event) => {
 refreshDetails();
 
 async function fetchText() {
-    let response = await fetch('https://www.ugomartingale.herokuapp.com');
+    let response = await fetch('https://ugomartingale.herokuapp.com');
         let data = await response.json;
         alert(data);
     
