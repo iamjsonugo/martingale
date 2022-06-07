@@ -87,7 +87,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
         }
         processPos();
 
-
+   let totalMatches = 0;
         for (let i = 0; i < season.length; i++) {
             for (let j = 0; j < season[i].length; j++) {
                 const match = season[i][param - 1];
@@ -110,14 +110,16 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
                     teamCount.push(teamAName);
                     teamCount.push(teamBName);
                 }
-
+      
 
             }
         }
-
+ console.log("Total Weeks", totalMatches)
         let currentWeek = 0;
         let oldWeek = 0;
         let maxStreaks = [];
+        let endPos ="";
+        let endWeek= "";
         for (let i = 0; i < reports.winData.length; i++) {
             const match = reports.winData[i]; //
             let matchWeek = match.split(":")[0];
@@ -142,7 +144,15 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
                 " > ",
                 `<b>${lossStreak - 1}</b>`,
             ]);
+            endPos = pos;
+            endWeek = currentWeek
         }
+        reports.positionData.push([
+                `<b> End of ${totalMatches/10} Weeks</b`,
+                endPos,
+                " > ",
+                `<b>${(totalMatches/10)-endWeek}</b>`,
+            ]);
         maxStreaksPosition = [maxStreaks.length+1];
         // console.log(maxStreaksPosition)
         if (print == true) {
@@ -167,10 +177,10 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
         i += 1;
         document.querySelector(".betdata-table").innerHTML += `
         <tr>
-        <td>${i}</td>
+        
         <td>Pos. ${row[1]}</td>
+         <td>${row[3]}</td>
         <td>${row[0].replace(/: \d\d/, ":").replace(/: \d/, ":")}</td>
-        <td>${row[3]}</td>
         </tr>
         `;
     }
