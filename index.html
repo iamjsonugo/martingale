@@ -66,6 +66,9 @@
                     <tr>
                         <td colspan="2" class="season-header"></td>
                     </tr>
+                    <tr>
+                        <td colspan="2" class="end-pos-list"></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -99,17 +102,18 @@
             <table style="text-align:left;" class="stake-header table table-bordered table-large">
                 <tbody>
                     <tr>
-                        <td scope="col">Current week</td>
                         <td scope="col">
-                            <input type="number" class="winning-week form-control" value="1">
+                            Current week: <input type="number" class="winning-week form-control w-50" value="1">
                         </td>
-                    </tr>
-                    <tr>
+                        
+                
+                    
                         <td class="timer" colspan="2" scope="col"></td>
 
                     </tr>
                     <tr>
-                        <td colspan="2" scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right reset-btn" type="button">Reset</button></td>
+                        <td colspan="1" scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right reset-btn" type="button">Reset</button></td>
+                        <td colspan="1" scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right profit-btn" type="button">Profit</button></td>
 
                     </tr>
                 </tbody>
@@ -129,14 +133,23 @@
         <h3>Paste Raw Data</h3>
 
         <textarea rows="10" onclick="paste(this)" class="form-control bet-data-textarea" aria-label="With textarea"></textarea>
-        <br>
-        <!-- Button trigger modal -->
-        <button type="button" class="w-100 btn btn-primary save-data-btn float-right">
-            Save
-        </button>
-        <button type="button" class="w-100 btn btn-light float-right process-data-btn">
-            Process
-        </button>
+        <div class="table-responsive">
+            <table style="text-align:left;" class="nav-header table table-bordered table-large">
+                <thead>
+                    <tr>
+                        <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right process-data-btn" type="button">Proc</button></th>
+
+                        <th scope="col"><button class="btn w-100 btn-md btn-primary float-sm-right save-data-btn" type="button">Save</button></th>
+                    </tr>
+                </thead>
+                <tbody class="nav-table">
+                    <tr>
+                        <td colspan="2" class="paste-list"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
     </div>
 
 
