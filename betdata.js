@@ -351,7 +351,7 @@ document.querySelector(".save-data-btn").addEventListener("click", (event) => {
 (async () => {
   const initialData = await db.season
     .where('id')
-    .above(4)
+    .above(0)
     .desc()
     .toArray()
     
