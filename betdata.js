@@ -64,7 +64,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
         season.push(seasonData != "" ? seasonData: true)
     }
     season.shift();
-    console.log("SEASON TWO", season)
+    //console.log("SEASON TWO", season)
 
 
 
@@ -114,7 +114,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
 
             }
         }
- console.log("Total Weeks", totalMatches)
+ //console.log("Total Weeks", totalMatches)
         let currentWeek = 0;
         let oldWeek = 0;
         let maxStreaks = [];
@@ -234,12 +234,12 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
     let seasonNo = Math.floor(Math.random() * 10) + 1;
     date = date.split("/");
     myDate = new Date("20"+date[2], date[0]-1, date[1])
+    document.querySelector(".season-header").innerHTML = `
+    <b>ID: ${id}</b> <br>
+    <b>${myDate.toDateString()}, ${time} </b><br>
+    <b>Season 4 of 20 </b>
+    `;
     document.querySelector(".betdetails-table").innerHTML += `
-    <tr>
-    <td><b>ID ${id}</b></td>
-    <td><b>${myDate.toDateString()}, ${time} </b></td>
-    <td><b></b></td>
-    </tr>
     <tr>
     <td>Position</td>
     <td>${final.positionCount}</td>
@@ -348,18 +348,23 @@ document.querySelector(".save-data-btn").addEventListener("click", (event) => {
     refreshDetails()
 });
 
+(async () => {
+  const initialData = await db.season
+    .where('id')
+    .above(4)
+    .desc()
+    .toArray()
+    
 function refreshDetails(currentPage = 0) {
-    db.season.orderBy("id").reverse().limit(16).toArray().then(function (results) {
-        let data = results;
-
+console.log(initialData.length)
+    
+        let data = initialData;
         betData(data[currentPage].data, data[currentPage].time, data[currentPage].date, data[currentPage].id)
-
-    });
 }
 
-page = 15;
+page = initialData.length;
 document.querySelector(".prev-data-btn").addEventListener("click", (event) => {
-    if (page == 15) {
+    if (page == initialData.length) {
         page = 0
     } else {
         page = page+1;
@@ -368,7 +373,7 @@ document.querySelector(".prev-data-btn").addEventListener("click", (event) => {
 });
 document.querySelector(".next-data-btn").addEventListener("click", (event) => {
     if (page == 0) {
-        page = 15
+        page = initialData.length
     } else {
         page = page -1;
     }
@@ -376,7 +381,7 @@ document.querySelector(".next-data-btn").addEventListener("click", (event) => {
 });
 
 refreshDetails();
-
+})()// End of async db initial data
 
 function martingale() {
     let stakeMultiplier = 1.2; //
@@ -433,3 +438,4 @@ function openCity(evt, cityName) {
 }
 
 document.getElementById("defaultOpen").click();
+
