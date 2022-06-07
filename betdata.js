@@ -1,6 +1,7 @@
 const db = new Dexie("BetDb");
 db.version(1).stores({
-    season: "++id,date,data"
+    season: "++id,date,data",
+    account: "++id,balance"
 });
 
 let positionCount = [];
@@ -11,6 +12,7 @@ let textAreaData = document.querySelector(".bet-data-textarea").value;
 let timeSaved = "";
 let maxStreaks = 0;
 let totalMatches = 0;
+let endPosList = [];
 let final = {
     positionCount: positionCount,
     streakCount: streakCount,
@@ -153,6 +155,11 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
                 " > ",
                 `<b>${(totalMatches/10)-endWeek}</b>`,
             ]);
+       endPosList.push(
+                ` Pos${endPos.trim()}(<b>${(totalMatches/10)-endWeek}</b>)`,
+            );     
+        
+            
         maxStreaksPosition = [maxStreaks.length+1];
         // console.log(maxStreaksPosition)
         if (print == true) {
@@ -170,6 +177,8 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
     processPosition(8);
     processPosition(9);
     processPosition(10);
+    
+    endPosList.unshift(`Season ID ${id}<br>`)
 
     document.querySelector(".betdata-table").innerHTML = "";
     let i = 0;
@@ -256,7 +265,11 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
     <td>${final.teamCount.length}</td>
     </tr>
     `;
-
+    
+    //for (let i = 0; i < endPosList.length; i++) {
+        document.querySelector(".end-pos-list").innerHTML = endPosList;
+        document.querySelector(".paste-list").innerHTML = endPosList;
+   // }
 
     totalMatches = 0;
     winCount = 0;
@@ -265,6 +278,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
     teamCount = [];
     rawData = "";
     timeSaved = "";
+    endPosList = [];
 }
 
 
@@ -279,7 +293,7 @@ function calculateNextStake(previousLoss = 0, resetParam = false) {
         document.querySelector(".stakelist").innerHTML += `
         <b>
         <button class="btn btn-md each-stake w-100  float-sm-right ${row.nextStake}" style="background-color:lightgrey;margin:2px" onclick="navigator.clipboard.writeText(${row.nextStake});this.style.background='orange';document.querySelector('.winning-week').value=${row.step}" type="button" style="width:80px">
-        <h6>Week ${row.step}: ${row.nextStake.toLocaleString("en-US")}</h6>
+        <h6>Step ${row.step}: ${row.nextStake.toLocaleString("en-US")}</h6>
         Loss: ${row.accLoss.toLocaleString("en-US")},
         Win: ${row.winning.toLocaleString("en-US")},
         PnL: ${row.pnl.toLocaleString("en-US")}
@@ -345,10 +359,10 @@ function saveData() {
 document.querySelector(".save-data-btn").addEventListener("click", (event) => {
     saveData();
     alert("Data saved!")
-    refreshDetails()
+    getInitialData();
 });
 
-(async () => {
+const getInitialData = async () => {
   const initialData = await db.season
     .where('id')
     .above(0)
@@ -381,7 +395,9 @@ document.querySelector(".next-data-btn").addEventListener("click", (event) => {
 });
 
 refreshDetails();
-})()// End of async db initial data
+}// End of async db initial Data
+
+getInitialData();
 
 function martingale() {
     let stakeMultiplier = 1.2; //
