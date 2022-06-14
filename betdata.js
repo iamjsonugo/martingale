@@ -156,7 +156,7 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
                 `<b>${(totalMatches/10)-endWeek}</b>`,
             ]);
        endPosList.push(
-                ` ${endPos.trim()}(<b>${(totalMatches/10)-endWeek}</b>)`,
+                `Pos. ${endPos.trim()} - <b>${(totalMatches/10)-endWeek}</b><br>`,
             );     
      
          
