@@ -408,7 +408,7 @@ function martingale() {
     const stakeList = [];
     let currentAL = 0;
     let winning = 0;
-    let roundNum = 10;
+    let roundNum = 5;
 
     function rounder(num) {
         return Math.round(num / roundNum) * roundNum;
