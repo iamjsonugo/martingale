@@ -156,10 +156,10 @@ function betData(text = document.querySelector(".bet-data-textarea").value, time
                 `<b>${(totalMatches/10)-endWeek}</b>`,
             ]);
        endPosList.push(
-                ` Pos${endPos.trim()}(<b>${(totalMatches/10)-endWeek}</b>)`,
+                `${endPos.trim()}(<b>${(totalMatches/10)-endWeek}</b>)`,
             );     
         
-            
+         
         maxStreaksPosition = [maxStreaks.length+1];
         // console.log(maxStreaksPosition)
         if (print == true) {
