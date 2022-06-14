@@ -1,4 +1,4 @@
-const db = new Dexie("BetDb");
+const db = new Dexie("MartingaleDb");
 db.version(1).stores({
     season: "++id,date,data",
     account: "++id,balance"
